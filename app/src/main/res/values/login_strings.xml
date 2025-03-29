@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_heading">Login</string>
+    <string name="hint_school_name">School Name</string>
+    <string name="hint_registration_number">Registration Number</string>
+    <string name="hint_mobile_number">Mobile Number</string>
+    <string name="btn_login">Login</string>
+</resources>

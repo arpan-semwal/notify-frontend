@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+        <!-- Hints and Labels -->
+        <string name="hint_institution_name">Institution Name / School Name</string>
+        <string name="hint_city">City</string>
+        <string name="hint_address">Address</string>
+        <string name="hint_courses">Start typing courses</string>
+        <string name="selected_courses">Selected Courses</string>
+        <string name="hint_password">Password</string>
+        <string name="hint_confirm_password">Confirm Password</string>
+        <string name="hint_school_email">School Email</string> <!-- Add this line -->
+
+        <!-- Error Messages -->
+        <string name="password_mismatch_error">Passwords do not match!</string>
+
+        <!-- Buttons -->
+        <string name="btn_register">Register</string>
+    </resources>
+

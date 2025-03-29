@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Notification</string>
+    <string name="nav_open">Open navigation</string>
+    <string name="nav_close">Close navigation</string>
+    <string-array name="school_college_options">
+        <item>School</item>
+        <item>College</item>
+
+    </string-array>
+</resources>

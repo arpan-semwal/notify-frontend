@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.notification">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:usesCleartextTraffic="true"
+        android:allowBackup="true"
+        android:theme="@style/Theme.MyApplication">
+
+        <!-- Make sure the main launcher activity has android:exported="true" -->
+        <activity android:name=".AskPageActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".HomePageActivity" />
+        <activity android:name=".auth.Student.Login.StudentLoginActivity"/>
+        <activity android:name=".auth.Admin.Login.AdminLoginPageActivity"/>
+        <activity android:name=".auth.Admin.Register.AdminRegisterPageActivity"/>
+        <activity android:name=".auth.Student.Register.StudentRegisterActivity"/>
+        <activity android:name=".auth.Admin.Register.AddCoursePageActivity"/>
+        <activity android:name=".Dashboard.AdminDashboard.AdminDashboardActivity"/>
+        
+
+
+    </application>
+</manifest>
+
