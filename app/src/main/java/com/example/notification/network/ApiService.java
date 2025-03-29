@@ -13,7 +13,7 @@ public interface ApiService {
     Call<List<Message>> getMessages(@Query("schoolName") String schoolName);
 
 
-    @POST("/api/admin/register")
+    @POST("api/admin/register") // ✅ No leading "/"
     Call<String> registerAdmin(@Body AdminRegister admin);
 
 }

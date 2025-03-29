@@ -14,10 +14,10 @@
         android:hint="Enter Course Name"
         android:padding="16dp"
         android:textSize="16sp"
-        android:layout_marginBottom="16dp"
         android:background="@android:drawable/editbox_background"
         android:textColor="@android:color/black"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:layout_marginBottom="12dp"/>
 
     <!-- TextView to Display Selected Courses -->
     <TextView
@@ -27,7 +27,7 @@
         android:text="Selected Courses: "
         android:textSize="16sp"
         android:padding="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:textColor="@android:color/black"/>
 
     <!-- Add Course Button -->
@@ -38,19 +38,20 @@
         android:text="Add Course"
         android:padding="12dp"
         android:textSize="16sp"
-        android:layout_marginBottom="40dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@android:color/holo_green_dark"
+        android:textColor="@android:color/white"/>
 
-    <!-- Horizontal Layout for Next and Skip Buttons -->
+    <!-- Horizontal Layout for Skip and Register Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="center"
         android:gravity="center"
         android:layout_marginTop="20dp">
 
-        <!-- Skip Button (Aligned Left) -->
+        <!-- Skip Button -->
         <Button
             android:id="@+id/btn_skip"
             android:layout_width="0dp"
@@ -61,20 +62,20 @@
             android:textSize="16sp"
             android:backgroundTint="@android:color/holo_red_dark"
             android:textColor="@android:color/white"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="8dp"/>
 
-        <!-- Next Button (Aligned Right) -->
+        <!-- Register Button -->
         <Button
-            android:id="@+id/btn_next"
+            android:id="@+id/btn_register"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="regsiter"
+            android:text="Register"
             android:padding="12dp"
             android:textSize="16sp"
             android:backgroundTint="@android:color/holo_blue_dark"
             android:textColor="@android:color/white"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="8dp"/>
 
     </LinearLayout>
 

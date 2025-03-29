@@ -1,5 +1,7 @@
 package com.example.notification.network;
 
+import java.util.List;
+
 public class AdminRegister {
     private String schoolName;
     private String city;
@@ -7,21 +9,23 @@ public class AdminRegister {
     private String mobileNumber;
     private String email;
     private String password;
+    private List<AdminCourse> courses;
 
-    public AdminRegister(String schoolName, String city, String address, String mobileNumber, String email, String password) {
+    public AdminRegister(String schoolName, String city, String address, String mobileNumber, String email, String password, List<AdminCourse> courses) {
         this.schoolName = schoolName;
         this.city = city;
         this.address = address;
         this.mobileNumber = mobileNumber;
         this.email = email;
         this.password = password;
+        this.courses = courses;
     }
 
-    // Getters
-    public String getSchoolName() { return schoolName; }
-    public String getCity() { return city; }
-    public String getAddress() { return address; }
-    public String getMobileNumber() { return mobileNumber; }
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
+    public static class AdminCourse {
+        private String courseName;
+
+        public AdminCourse(String courseName) {
+            this.courseName = courseName;
+        }
+    }
 }
