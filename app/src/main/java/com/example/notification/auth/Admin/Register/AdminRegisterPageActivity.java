@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.notification.Dashboard.AdminDashboard.AdminDashboardActivity;
 import com.example.notification.R;
 import com.example.notification.auth.Admin.Login.AdminLoginPageActivity;
 import com.example.notification.network.AdminRegister;
@@ -63,7 +64,7 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
 
         // Create AdminRegister Object
         AdminRegister admin = new AdminRegister(schoolName, city, address, mobileNumber, email, password);
-dsadsad  
+
         // Make API Call
         apiService.registerAdmin(admin).enqueue(new Callback<String>() {
             @Override
@@ -71,7 +72,7 @@ dsadsad
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(AdminRegisterPageActivity.this, response.body(), Toast.LENGTH_SHORT).show();
                     // Navigate to Admin Login or Next Page
-                    startActivity(new Intent(AdminRegisterPageActivity.this, AdminDashda.class));
+                    startActivity(new Intent(AdminRegisterPageActivity.this, AdminDashboardActivity.class));
                     finish();
                 } else {
                     Toast.makeText(AdminRegisterPageActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
