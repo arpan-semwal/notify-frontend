@@ -10,7 +10,9 @@ public class AdminRegister {
     private String email;
     private String password;
     private List<AdminCourse> courses;
+    private String institutionId;  // ✅ New field
 
+    // Constructor
     public AdminRegister(String schoolName, String city, String address, String mobileNumber, String email, String password, List<AdminCourse> courses) {
         this.schoolName = schoolName;
         this.city = city;
@@ -21,11 +23,8 @@ public class AdminRegister {
         this.courses = courses;
     }
 
-    public static class AdminCourse {
-        private String courseName;
-
-        public AdminCourse(String courseName) {
-            this.courseName = courseName;
-        }
+    // Getter for institutionId
+    public String getInstitutionId() {
+        return institutionId;
     }
 }
