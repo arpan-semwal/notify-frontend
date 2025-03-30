@@ -13,12 +13,11 @@ import com.example.notification.Dashboard.AdminDashboard.AdminDashboardActivity;
 import com.example.notification.R;
 import com.example.notification.network.AdminRegister;
 import com.example.notification.network.ApiService;
+import com.example.notification.network.RegisterResponse;
 import com.example.notification.network.RetrofitClient;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +38,6 @@ public class AddCoursePageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
-        // Get Data from Intent
         Intent intent = getIntent();
         schoolName = intent.getStringExtra("schoolName");
         city = intent.getStringExtra("city");
@@ -48,7 +46,6 @@ public class AddCoursePageActivity extends AppCompatActivity {
         email = intent.getStringExtra("email");
         password = intent.getStringExtra("password");
 
-        // Initialize UI
         etCourseName = findViewById(R.id.et_course_name);
         tvSelectedCourses = findViewById(R.id.tv_selected_courses);
         btnAddCourse = findViewById(R.id.btn_add_course);
@@ -92,38 +89,35 @@ public class AddCoursePageActivity extends AppCompatActivity {
             return;
         }
 
-        // Convert selected courses into AdminCourse objects
         List<AdminRegister.AdminCourse> courseList = new ArrayList<>();
         for (String courseName : selectedCourses) {
             courseList.add(new AdminRegister.AdminCourse(courseName));
         }
 
-        // Create AdminRegister object
         AdminRegister admin = new AdminRegister(schoolName, city, address, mobileNumber, email, password, courseList);
-
-        // 🔍 Log the data being sent to the server
         Log.d("RegisterAdmin", "Sending data: " + new Gson().toJson(admin));
 
-        apiService.registerAdmin(admin).enqueue(new Callback<String>() {
+        apiService.registerAdmin(admin).enqueue(new Callback<RegisterResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                Log.d("RegisterAdmin", "Response Code: " + response.code());
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(AddCoursePageActivity.this, response.body(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddCoursePageActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(AddCoursePageActivity.this, AdminDashboardActivity.class));
                     finish();
                 } else {
                     try {
                         String errorBody = response.errorBody().string();
                         Log.e("RegisterAdmin", "Error: " + errorBody);
-                        Toast.makeText(AddCoursePageActivity.this, "Registration failed! " + errorBody, Toast.LENGTH_LONG).show();
+                        Toast.makeText(AddCoursePageActivity.this, "Server Error: " + errorBody, Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        Toast.makeText(AddCoursePageActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddCoursePageActivity.this, "Unexpected response!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<RegisterResponse> call, Throwable t) {
                 Log.e("RegisterAdmin", "Network error: " + t.getMessage());
                 Toast.makeText(AddCoursePageActivity.this, "Network Error! " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
