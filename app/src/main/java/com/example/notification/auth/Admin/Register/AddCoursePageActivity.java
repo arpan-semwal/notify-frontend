@@ -1,6 +1,7 @@
 package com.example.notification.auth.Admin.Register;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -91,7 +92,7 @@ public class AddCoursePageActivity extends AppCompatActivity {
 
         List<AdminCourse> courseList = new ArrayList<>();
         for (String courseName : selectedCourses) {
-            courseList.add(new AdminCourse(courseName));  // ✅ Now this should work!
+            courseList.add(new AdminCourse(courseName));
         }
 
         AdminRegister admin = new AdminRegister(schoolName, city, address, mobileNumber, email, password, courseList);
@@ -102,13 +103,19 @@ public class AddCoursePageActivity extends AppCompatActivity {
             public void onResponse(Call<AdminRegister> call, Response<AdminRegister> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     AdminRegister registeredAdmin = response.body();
-                    String institutionId = registeredAdmin.getInstitutionId();  // ✅ Get institutionId
+                    String institutionId = registeredAdmin.getInstitutionId();
 
                     Log.d("RegisterAdmin", "Institution ID: " + institutionId);
                     Toast.makeText(AddCoursePageActivity.this, "Registered Successfully! ID: " + institutionId, Toast.LENGTH_LONG).show();
 
-                    // TODO: Store institutionId in SharedPreferences or Database
+                    // ✅ Save login status in SharedPreferences
+                    SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean("isLoggedIn", true);
+                    editor.putString("institutionId", institutionId);  // ✅ Save Institution ID if needed
+                    editor.apply();
 
+                    // ✅ Redirect to Dashboard
                     startActivity(new Intent(AddCoursePageActivity.this, AdminDashboardActivity.class));
                     finish();
                 } else {
