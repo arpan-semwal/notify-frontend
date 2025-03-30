@@ -13,7 +13,8 @@ public interface ApiService {
     Call<List<Message>> getMessages(@Query("schoolName") String schoolName);
 
 
-    @POST("api/admin/register")
-    Call<RegisterResponse> registerAdmin(@Body AdminRegister adminRegister);
+    @POST("/api/admin/register")
+    Call<AdminRegister> registerAdmin(@Body AdminRegister adminRegister);  // ✅ Updated response type
+
 
 }

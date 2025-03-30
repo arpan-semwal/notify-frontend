@@ -21,6 +21,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.example.notification.network.AdminCourse;
 
 public class AddCoursePageActivity extends AppCompatActivity {
 
@@ -30,7 +31,6 @@ public class AddCoursePageActivity extends AppCompatActivity {
     private List<String> selectedCourses = new ArrayList<>();
     private ArrayAdapter<String> coursesAdapter;
     private ApiService apiService;
-
     private String schoolName, city, address, mobileNumber, email, password;
 
     @Override
@@ -89,37 +89,36 @@ public class AddCoursePageActivity extends AppCompatActivity {
             return;
         }
 
-        List<AdminRegister.AdminCourse> courseList = new ArrayList<>();
+        List<AdminCourse> courseList = new ArrayList<>();
         for (String courseName : selectedCourses) {
-            courseList.add(new AdminRegister.AdminCourse(courseName));
+            courseList.add(new AdminCourse(courseName));  // ✅ Now this should work!
         }
 
         AdminRegister admin = new AdminRegister(schoolName, city, address, mobileNumber, email, password, courseList);
         Log.d("RegisterAdmin", "Sending data: " + new Gson().toJson(admin));
 
-        apiService.registerAdmin(admin).enqueue(new Callback<RegisterResponse>() {
+        apiService.registerAdmin(admin).enqueue(new Callback<AdminRegister>() {
             @Override
-            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-                Log.d("RegisterAdmin", "Response Code: " + response.code());
+            public void onResponse(Call<AdminRegister> call, Response<AdminRegister> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(AddCoursePageActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    AdminRegister registeredAdmin = response.body();
+                    String institutionId = registeredAdmin.getInstitutionId();  // ✅ Get institutionId
+
+                    Log.d("RegisterAdmin", "Institution ID: " + institutionId);
+                    Toast.makeText(AddCoursePageActivity.this, "Registered Successfully! ID: " + institutionId, Toast.LENGTH_LONG).show();
+
+                    // TODO: Store institutionId in SharedPreferences or Database
+
                     startActivity(new Intent(AddCoursePageActivity.this, AdminDashboardActivity.class));
                     finish();
                 } else {
-                    try {
-                        String errorBody = response.errorBody().string();
-                        Log.e("RegisterAdmin", "Error: " + errorBody);
-                        Toast.makeText(AddCoursePageActivity.this, "Server Error: " + errorBody, Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(AddCoursePageActivity.this, "Unexpected response!", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(AddCoursePageActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<RegisterResponse> call, Throwable t) {
-                Log.e("RegisterAdmin", "Network error: " + t.getMessage());
-                Toast.makeText(AddCoursePageActivity.this, "Network Error! " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<AdminRegister> call, Throwable t) {
+                Toast.makeText(AddCoursePageActivity.this, "Network Error!", Toast.LENGTH_SHORT).show();
             }
         });
     }
