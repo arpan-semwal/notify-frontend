@@ -1,4 +1,4 @@
-package com.example.notification.network;
+package com.example.notification.models;
 
 import java.util.List;
 
@@ -9,21 +9,23 @@ public class AdminRegister {
     private String mobileNumber;
     private String email;
     private String password;
+    private String institutionType;  // ✅ Added missing field
     private List<AdminCourse> courses;
-    private String institutionId;  // ✅ New field
+    private String institutionId;
 
-    // Constructor
-    public AdminRegister(String schoolName, String city, String address, String mobileNumber, String email, String password, List<AdminCourse> courses) {
+    // ✅ Updated Constructor
+    public AdminRegister(String schoolName, String city, String address, String mobileNumber,
+                         String email, String password, String institutionType, List<AdminCourse> courses) {
         this.schoolName = schoolName;
         this.city = city;
         this.address = address;
         this.mobileNumber = mobileNumber;
         this.email = email;
         this.password = password;
+        this.institutionType = institutionType;  // ✅ Assigning value
         this.courses = courses;
     }
 
-    // Getter for institutionId
     public String getInstitutionId() {
         return institutionId;
     }

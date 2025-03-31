@@ -11,6 +11,28 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
+
+        <RadioGroup
+            android:id="@+id/rgInstitutionType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbSchool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="School"
+                android:checked="true"/> <!-- Default checked -->
+
+            <RadioButton
+                android:id="@+id/rbCollege"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="College"/>
+        </RadioGroup>
+
+
         <EditText
             android:id="@+id/et_school_name"
             android:layout_width="match_parent"

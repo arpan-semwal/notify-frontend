@@ -9,7 +9,7 @@ import com.example.notification.Dashboard.StudentDashboard.StudentDashboardActiv
 import com.example.notification.R;
 import com.example.notification.network.ApiService;
 import com.example.notification.network.RetrofitClient;
-import com.example.notification.network.StudentRegister;
+import com.example.notification.models.StudentRegister;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

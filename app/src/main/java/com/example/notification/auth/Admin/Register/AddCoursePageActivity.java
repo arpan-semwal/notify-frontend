@@ -12,9 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.notification.Dashboard.AdminDashboard.AdminDashboardActivity;
 import com.example.notification.R;
-import com.example.notification.network.AdminRegister;
+import com.example.notification.models.AdminRegister;
 import com.example.notification.network.ApiService;
-import com.example.notification.network.RegisterResponse;
 import com.example.notification.network.RetrofitClient;
 import com.google.gson.Gson;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.example.notification.network.AdminCourse;
+import com.example.notification.models.AdminCourse;
 
 public class AddCoursePageActivity extends AppCompatActivity {
 
@@ -32,13 +31,14 @@ public class AddCoursePageActivity extends AppCompatActivity {
     private List<String> selectedCourses = new ArrayList<>();
     private ArrayAdapter<String> coursesAdapter;
     private ApiService apiService;
-    private String schoolName, city, address, mobileNumber, email, password;
+    private String schoolName, city, address, mobileNumber, email, password, institutionType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
+        // Get data from Intent
         Intent intent = getIntent();
         schoolName = intent.getStringExtra("schoolName");
         city = intent.getStringExtra("city");
@@ -46,7 +46,14 @@ public class AddCoursePageActivity extends AppCompatActivity {
         mobileNumber = intent.getStringExtra("mobileNumber");
         email = intent.getStringExtra("email");
         password = intent.getStringExtra("password");
+        institutionType = intent.getStringExtra("institutionType");
 
+        // Ensure institutionType is not null
+        if (institutionType == null || institutionType.isEmpty()) {
+            institutionType = "School";  // Default value if missing
+        }
+
+        // Initialize UI elements
         etCourseName = findViewById(R.id.et_course_name);
         tvSelectedCourses = findViewById(R.id.tv_selected_courses);
         btnAddCourse = findViewById(R.id.btn_add_course);
@@ -54,6 +61,7 @@ public class AddCoursePageActivity extends AppCompatActivity {
 
         apiService = RetrofitClient.getInstance().getApiService();
 
+        // Predefined course list
         List<String> allCourses = new ArrayList<>();
         allCourses.add("B.Tech in Computer Science");
         allCourses.add("B.Tech in Civil Engineering");
@@ -62,9 +70,11 @@ public class AddCoursePageActivity extends AppCompatActivity {
         allCourses.add("BBA in Marketing");
         allCourses.add("B.Com in Accounting and Finance");
 
+        // Set up dropdown adapter
         coursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, allCourses);
         etCourseName.setAdapter(coursesAdapter);
 
+        // Button click listeners
         btnAddCourse.setOnClickListener(v -> addCourse());
         btnRegister.setOnClickListener(v -> registerAdmin());
     }
@@ -95,7 +105,8 @@ public class AddCoursePageActivity extends AppCompatActivity {
             courseList.add(new AdminCourse(courseName));
         }
 
-        AdminRegister admin = new AdminRegister(schoolName, city, address, mobileNumber, email, password, courseList);
+        // ✅ Include institutionType in AdminRegister object
+        AdminRegister admin = new AdminRegister(schoolName, city, address, mobileNumber, email, password, institutionType, courseList);
         Log.d("RegisterAdmin", "Sending data: " + new Gson().toJson(admin));
 
         apiService.registerAdmin(admin).enqueue(new Callback<AdminRegister>() {
@@ -112,7 +123,7 @@ public class AddCoursePageActivity extends AppCompatActivity {
                     SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("isLoggedIn", true);
-                    editor.putString("institutionId", institutionId);  // ✅ Save Institution ID if needed
+                    editor.putString("institutionId", institutionId);
                     editor.apply();
 
                     // ✅ Redirect to Dashboard

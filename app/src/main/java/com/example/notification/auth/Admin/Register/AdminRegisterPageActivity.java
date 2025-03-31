@@ -2,9 +2,10 @@ package com.example.notification.auth.Admin.Register;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.notification.R;
@@ -13,6 +14,8 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
 
     private EditText etSchoolName, etCity, etAddress, etMobileNumber, etSchoolEmail, etPassword;
     private Button btnNext;
+    private RadioGroup rgInstitutionType;
+    private String institutionType = "School"; // Default value
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,24 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
         etSchoolEmail = findViewById(R.id.et_school_email);
         etPassword = findViewById(R.id.et_password);
         btnNext = findViewById(R.id.btn_next);
+        rgInstitutionType = findViewById(R.id.rgInstitutionType);
+
+        // Set initial selection based on checked radio button
+        int selectedId = rgInstitutionType.getCheckedRadioButtonId();
+        if (selectedId == R.id.rbSchool) {
+            institutionType = "School";
+        } else if (selectedId == R.id.rbCollege) {
+            institutionType = "College";
+        }
+
+        // RadioGroup Change Listener
+        rgInstitutionType.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rbSchool) {
+                institutionType = "School";
+            } else if (checkedId == R.id.rbCollege) {
+                institutionType = "College";
+            }
+        });
 
         btnNext.setOnClickListener(v -> proceedToAddCoursePage());
     }
@@ -45,7 +66,10 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
             return;
         }
 
-        // Passing data to AddCoursePageActivity
+        // Debugging - Check selected institution type before proceeding
+        Toast.makeText(this, "Selected Institution: " + institutionType, Toast.LENGTH_SHORT).show();
+
+        // Passing data to the next activity
         Intent intent = new Intent(AdminRegisterPageActivity.this, AddCoursePageActivity.class);
         intent.putExtra("schoolName", schoolName);
         intent.putExtra("city", city);
@@ -53,6 +77,7 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
         intent.putExtra("mobileNumber", mobileNumber);
         intent.putExtra("email", email);
         intent.putExtra("password", password);
+        intent.putExtra("institutionType", institutionType); // Pass the selected type
         startActivity(intent);
     }
 }
