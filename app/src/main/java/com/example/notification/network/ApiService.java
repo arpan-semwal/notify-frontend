@@ -5,6 +5,8 @@ import retrofit2.Call;
 import retrofit2.http.*;
 import com.example.notification.network.AdminRegister;
 
+import com.example.notification.network.StudentRegister;
+
 public interface ApiService {
     @POST("api/users/login")
     Call<LoginResponse> loginUser(@Body UserRequest userRequest);
@@ -16,5 +18,7 @@ public interface ApiService {
     @POST("/api/admin/register")
     Call<AdminRegister> registerAdmin(@Body AdminRegister adminRegister);  // ✅ Updated response type
 
+    @POST("api/student/register")
+    Call<StudentRegister> registerStudent(@Body StudentRegister student);
 
 }
