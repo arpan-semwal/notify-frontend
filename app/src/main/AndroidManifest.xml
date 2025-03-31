@@ -26,8 +26,8 @@
         <activity android:name=".auth.Admin.Register.AdminRegisterPageActivity"/>
         <activity android:name=".auth.Student.Register.StudentRegisterActivity"/>
         <activity android:name=".auth.Admin.Register.AddCoursePageActivity"/>
+        <activity android:name=".Dashboard.StudentDashboard.StudentDashboardActivity"/>
         <activity android:name=".Dashboard.AdminDashboard.AdminDashboardActivity"/>
-        
 
 
     </application>
