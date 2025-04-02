@@ -13,86 +13,80 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.notification.R;
 import com.example.notification.auth.Admin.Login.AdminLoginPageActivity;
-import java.util.Arrays;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
-    private Spinner spinnerClass, spinnerCourse;
+    private Spinner spinnerSelection;
     private EditText etMessage;
     private Button btnSendMessage, btnLogout;
-
-    private String selectedClass, selectedCourse;
+    private String selectedCourse;
+    private List<String> selectedCourses = new ArrayList<>();  // ✅ Moved to class level
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
-        spinnerClass = findViewById(R.id.spinner_class);
-        spinnerCourse = findViewById(R.id.spinner_course);
+        spinnerSelection = findViewById(R.id.spinner_selection);
         etMessage = findViewById(R.id.et_message);
         btnSendMessage = findViewById(R.id.btn_send_message);
-        btnLogout = findViewById(R.id.btn_logout); // ✅ Logout button
+        btnLogout = findViewById(R.id.btn_logout);
 
-        // Sample data for spinners
-        List<String> classList = Arrays.asList("Class 1", "Class 2", "Class 3");
-        List<String> courseList = Arrays.asList("Math", "Science", "English");
+        // ✅ Load selected courses from SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
+        String selectedCoursesJson = prefs.getString("selectedCourses", "[]");
 
-        // Setup adapters for spinners
-        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, classList);
-        classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerClass.setAdapter(classAdapter);
+        // ✅ Correct way to parse JSON to List<String>
+        Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+        selectedCourses = new Gson().fromJson(selectedCoursesJson, listType);
 
-        ArrayAdapter<String> courseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, courseList);
-        courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCourse.setAdapter(courseAdapter);
+        // ✅ Ensure there's at least one item to show
+        if (selectedCourses == null || selectedCourses.isEmpty()) {
+            selectedCourses = new ArrayList<>();
+            selectedCourses.add("No Courses Found");
+        }
 
-        // Spinner item selection listeners
-        spinnerClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // ✅ Set up adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectedCourses);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSelection.setAdapter(adapter);
+
+        // ✅ Spinner Selection (No more error because `selectedCourses` is a class variable)
+        spinnerSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedClass = classList.get(position);
+                selectedCourse = selectedCourses.get(position);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        spinnerCourse.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedCourse = courseList.get(position);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        // Button Click Listener for Sending Message
-        btnSendMessage.setOnClickListener(v -> {
-            String message = etMessage.getText().toString().trim();
-
-            if (selectedClass == null || selectedCourse == null || message.isEmpty()) {
-                Toast.makeText(AdminDashboardActivity.this, "Please select class, course, and enter a message!", Toast.LENGTH_SHORT).show();
-            } else {
-                // Here, you can call your API to send the message
-                Toast.makeText(AdminDashboardActivity.this, "Message sent to " + selectedClass + " - " + selectedCourse, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // ✅ Logout Button Click Listener
+        // ✅ Button Click Listeners
+        btnSendMessage.setOnClickListener(v -> sendMessage());
         btnLogout.setOnClickListener(v -> logoutAdmin());
     }
 
+    private void sendMessage() {
+        Toast.makeText(this, "Message sent to " + selectedCourse, Toast.LENGTH_SHORT).show();
+    }
+
     private void logoutAdmin() {
+        // ✅ Clear stored login data
         SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean("isLoggedIn", false);  // ✅ Clear login session
-        editor.apply();
+        editor.clear();  // Remove all stored preferences
+        editor.apply();  // Apply changes
 
-        Toast.makeText(AdminDashboardActivity.this, "Logged out successfully!", Toast.LENGTH_SHORT).show();
-
-        // Redirect to login screen
-        startActivity(new Intent(AdminDashboardActivity.this, AdminLoginPageActivity.class));
-        finish(); // ✅ Prevent going back to Dashboard after logout
+        // ✅ Redirect to login page
+        Intent intent = new Intent(this, AdminLoginPageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // Prevent back navigation
+        startActivity(intent);
+        finish();  // ✅ Close this activity
     }
 }

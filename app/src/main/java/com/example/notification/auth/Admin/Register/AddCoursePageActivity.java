@@ -105,7 +105,6 @@ public class AddCoursePageActivity extends AppCompatActivity {
             courseList.add(new AdminCourse(courseName));
         }
 
-        // ✅ Include institutionType in AdminRegister object
         AdminRegister admin = new AdminRegister(schoolName, city, address, mobileNumber, email, password, institutionType, courseList);
         Log.d("RegisterAdmin", "Sending data: " + new Gson().toJson(admin));
 
@@ -117,16 +116,17 @@ public class AddCoursePageActivity extends AppCompatActivity {
                     String institutionId = registeredAdmin.getInstitutionId();
 
                     Log.d("RegisterAdmin", "Institution ID: " + institutionId);
-                    Toast.makeText(AddCoursePageActivity.this, "Registered Successfully! ID: " + institutionId, Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddCoursePageActivity.this, "Registered Successfully!", Toast.LENGTH_LONG).show();
 
-                    // ✅ Save login status in SharedPreferences
+                    // ✅ Save selected courses in SharedPreferences
                     SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("isLoggedIn", true);
                     editor.putString("institutionId", institutionId);
+                    editor.putString("selectedCourses", new Gson().toJson(selectedCourses));
                     editor.apply();
 
-                    // ✅ Redirect to Dashboard
+                    // Redirect to Dashboard
                     startActivity(new Intent(AddCoursePageActivity.this, AdminDashboardActivity.class));
                     finish();
                 } else {
