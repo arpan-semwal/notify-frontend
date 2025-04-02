@@ -21,4 +21,10 @@ public interface ApiService {
     @POST("api/student/register")
     Call<StudentRegister> registerStudent(@Body StudentRegister student);
 
+    @GET("/api/schools/all")
+    Call<List<String>> getSchoolNames();
+
+    @GET("/api/fetchstudentcourse/{schoolName}")
+    Call<List<String>> getCoursesBySchool(@Path("schoolName") String schoolName);
+
 }

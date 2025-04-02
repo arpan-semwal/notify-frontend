@@ -37,15 +37,20 @@
             android:background="@android:drawable/editbox_background"
             android:textColor="@android:color/black"/>
 
-        <EditText
-            android:id="@+id/edt_school_name"
+        <!-- School Selection Dropdown -->
+        <Spinner
+            android:id="@+id/spinner_school_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="School/College Name"
-            android:padding="12dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"/>
+            android:layout_marginTop="10dp"/>
+
+
+        <Spinner
+            android:id="@+id/spinner_course"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+
 
         <EditText
             android:id="@+id/edt_mobile_number"
@@ -58,12 +63,6 @@
             android:layout_marginTop="10dp"
             android:background="@android:drawable/editbox_background"
             android:textColor="@android:color/black"/>
-
-
-
-
-
-
 
         <Button
             android:id="@+id/btn_register"
