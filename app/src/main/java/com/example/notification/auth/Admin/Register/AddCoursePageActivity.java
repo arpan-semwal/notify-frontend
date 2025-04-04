@@ -31,6 +31,7 @@ public class AddCoursePageActivity extends AppCompatActivity {
     private List<String> selectedCourses = new ArrayList<>();
     private ArrayAdapter<String> coursesAdapter;
     private ApiService apiService;
+
     private String schoolName, city, address, mobileNumber, email, password, institutionType;
 
     @Override
@@ -118,16 +119,19 @@ public class AddCoursePageActivity extends AppCompatActivity {
                     Log.d("RegisterAdmin", "Institution ID: " + institutionId);
                     Toast.makeText(AddCoursePageActivity.this, "Registered Successfully!", Toast.LENGTH_LONG).show();
 
-                    // ✅ Save selected courses in SharedPreferences
+                    // ✅ Save to SharedPreferences
                     SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("isLoggedIn", true);
                     editor.putString("institutionId", institutionId);
+                    editor.putString("schoolName", schoolName); // ✅ Save schoolName
                     editor.putString("selectedCourses", new Gson().toJson(selectedCourses));
                     editor.apply();
 
-                    // Redirect to Dashboard
-                    startActivity(new Intent(AddCoursePageActivity.this, AdminDashboardActivity.class));
+                    // ✅ Pass schoolName via Intent as well
+                    Intent dashboardIntent = new Intent(AddCoursePageActivity.this, AdminDashboardActivity.class);
+                    dashboardIntent.putExtra("schoolName", schoolName);
+                    startActivity(dashboardIntent);
                     finish();
                 } else {
                     Toast.makeText(AddCoursePageActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();

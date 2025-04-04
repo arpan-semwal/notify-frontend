@@ -15,14 +15,13 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
     private EditText etSchoolName, etCity, etAddress, etMobileNumber, etSchoolEmail, etPassword;
     private Button btnNext;
     private RadioGroup rgInstitutionType;
-    private String institutionType = "School"; // Default value
+    private String institutionType = "School"; // Default selection
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_register);
 
-        // Initialize Views
         etSchoolName = findViewById(R.id.et_school_name);
         etCity = findViewById(R.id.et_city);
         etAddress = findViewById(R.id.et_address);
@@ -32,15 +31,6 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
         btnNext = findViewById(R.id.btn_next);
         rgInstitutionType = findViewById(R.id.rgInstitutionType);
 
-        // Set initial selection based on checked radio button
-        int selectedId = rgInstitutionType.getCheckedRadioButtonId();
-        if (selectedId == R.id.rbSchool) {
-            institutionType = "School";
-        } else if (selectedId == R.id.rbCollege) {
-            institutionType = "College";
-        }
-
-        // RadioGroup Change Listener
         rgInstitutionType.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rbSchool) {
                 institutionType = "School";
@@ -66,18 +56,15 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
             return;
         }
 
-        // Debugging - Check selected institution type before proceeding
-        Toast.makeText(this, "Selected Institution: " + institutionType, Toast.LENGTH_SHORT).show();
-
-        // Passing data to the next activity
-        Intent intent = new Intent(AdminRegisterPageActivity.this, AddCoursePageActivity.class);
+        Intent intent = new Intent(this, AddCoursePageActivity.class);
         intent.putExtra("schoolName", schoolName);
         intent.putExtra("city", city);
         intent.putExtra("address", address);
         intent.putExtra("mobileNumber", mobileNumber);
         intent.putExtra("email", email);
         intent.putExtra("password", password);
-        intent.putExtra("institutionType", institutionType); // Pass the selected type
+        intent.putExtra("institutionType", institutionType);
+
         startActivity(intent);
     }
 }

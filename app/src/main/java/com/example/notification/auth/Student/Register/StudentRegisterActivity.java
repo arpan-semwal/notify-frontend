@@ -112,7 +112,7 @@ public class StudentRegisterActivity extends AppCompatActivity {
         String name = edtName.getText().toString().trim();
         String fatherName = edtFatherName.getText().toString().trim();
         String schoolName = schoolSpinner.getSelectedItem().toString();
-        String course = courseSpinner.getSelectedItem().toString(); // ✅ Now selecting from dropdown
+        String course = courseSpinner.getSelectedItem().toString();
         String mobileNumber = edtMobileNumber.getText().toString().trim();
 
         if (name.isEmpty() || fatherName.isEmpty() || course.isEmpty() || mobileNumber.isEmpty()) {
@@ -132,7 +132,7 @@ public class StudentRegisterActivity extends AppCompatActivity {
             public void onResponse(Call<StudentRegister> call, Response<StudentRegister> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(StudentRegisterActivity.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                    navigateToDashboard();
+                    navigateToDashboard(name, fatherName, schoolName, course, mobileNumber);
                 } else {
                     Toast.makeText(StudentRegisterActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
                 }
@@ -145,12 +145,16 @@ public class StudentRegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void navigateToDashboard() {
+    private void navigateToDashboard(String name, String fatherName, String schoolName, String course, String mobileNumber) {
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(StudentRegisterActivity.this, StudentDashboardActivity.class);
+            intent.putExtra("name", name);
+            intent.putExtra("fatherName", fatherName);
+            intent.putExtra("schoolName", schoolName);
+            intent.putExtra("course", course);
+            intent.putExtra("mobileNumber", mobileNumber);
             startActivity(intent);
             finish();
         }, 1000);
     }
 }
-
