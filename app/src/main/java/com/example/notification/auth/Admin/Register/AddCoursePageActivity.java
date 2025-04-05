@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.notification.Dashboard.AdminDashboard.AdminDashboardActivity;
 import com.example.notification.R;
-import com.example.notification.network.AdminRegister;
+import com.example.notification.models.AdminRegister;
 import com.example.notification.network.ApiService;
 import com.example.notification.network.RegisterResponse;
 import com.example.notification.network.RetrofitClient;
@@ -22,7 +22,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.example.notification.network.AdminCourse;
+import com.example.notification.models.AdminCourse;
 
 public class AddCoursePageActivity extends AppCompatActivity {
 
@@ -32,13 +32,15 @@ public class AddCoursePageActivity extends AppCompatActivity {
     private List<String> selectedCourses = new ArrayList<>();
     private ArrayAdapter<String> coursesAdapter;
     private ApiService apiService;
-    private String schoolName, city, address, mobileNumber, email, password;
+
+    private String schoolName, city, address, mobileNumber, email, password, institutionType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
+        // Get data from Intent
         Intent intent = getIntent();
         schoolName = intent.getStringExtra("schoolName");
         city = intent.getStringExtra("city");
@@ -46,7 +48,14 @@ public class AddCoursePageActivity extends AppCompatActivity {
         mobileNumber = intent.getStringExtra("mobileNumber");
         email = intent.getStringExtra("email");
         password = intent.getStringExtra("password");
+        institutionType = intent.getStringExtra("institutionType");
 
+        // Ensure institutionType is not null
+        if (institutionType == null || institutionType.isEmpty()) {
+            institutionType = "School";  // Default value if missing
+        }
+
+        // Initialize UI elements
         etCourseName = findViewById(R.id.et_course_name);
         tvSelectedCourses = findViewById(R.id.tv_selected_courses);
         btnAddCourse = findViewById(R.id.btn_add_course);
@@ -54,6 +63,7 @@ public class AddCoursePageActivity extends AppCompatActivity {
 
         apiService = RetrofitClient.getInstance().getApiService();
 
+        // Predefined course list
         List<String> allCourses = new ArrayList<>();
         allCourses.add("B.Tech in Computer Science");
         allCourses.add("B.Tech in Civil Engineering");
@@ -62,9 +72,11 @@ public class AddCoursePageActivity extends AppCompatActivity {
         allCourses.add("BBA in Marketing");
         allCourses.add("B.Com in Accounting and Finance");
 
+        // Set up dropdown adapter
         coursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, allCourses);
         etCourseName.setAdapter(coursesAdapter);
 
+        // Button click listeners
         btnAddCourse.setOnClickListener(v -> addCourse());
         btnRegister.setOnClickListener(v -> registerAdmin());
     }
@@ -95,28 +107,30 @@ public class AddCoursePageActivity extends AppCompatActivity {
             courseList.add(new AdminCourse(courseName));
         }
 
-        AdminRegister admin = new AdminRegister(schoolName, city, address, mobileNumber, email, password, courseList);
+        AdminRegister admin = new AdminRegister(schoolName, city, address, mobileNumber, email, password, institutionType, courseList);
         Log.d("RegisterAdmin", "Sending data: " + new Gson().toJson(admin));
 
-        apiService.registerAdmin(admin).enqueue(new Callback<AdminRegister>() {
+        apiService.registerAdmin(admin).enqueue(new Callback<RegisterResponse>() {
             @Override
-            public void onResponse(Call<AdminRegister> call, Response<AdminRegister> response) {
+            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    AdminRegister registeredAdmin = response.body();
-                    String institutionId = registeredAdmin.getInstitutionId();
+                    RegisterResponse registerResponse = response.body();
+                    String institutionId = registerResponse.getUniqueId();
 
                     Log.d("RegisterAdmin", "Institution ID: " + institutionId);
-                    Toast.makeText(AddCoursePageActivity.this, "Registered Successfully! ID: " + institutionId, Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddCoursePageActivity.this, "Registered Successfully!", Toast.LENGTH_LONG).show();
 
-                    // ✅ Save login status in SharedPreferences
                     SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("isLoggedIn", true);
-                    editor.putString("institutionId", institutionId);  // ✅ Save Institution ID if needed
+                    editor.putString("schoolUniqueId", institutionId);
+                    editor.putString("schoolName", schoolName);
+                    editor.putString("selectedCourses", new Gson().toJson(selectedCourses));
                     editor.apply();
 
-                    // ✅ Redirect to Dashboard
-                    startActivity(new Intent(AddCoursePageActivity.this, AdminDashboardActivity.class));
+                    Intent dashboardIntent = new Intent(AddCoursePageActivity.this, AdminDashboardActivity.class);
+                    dashboardIntent.putExtra("schoolName", schoolName);
+                    startActivity(dashboardIntent);
                     finish();
                 } else {
                     Toast.makeText(AddCoursePageActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
@@ -124,9 +138,12 @@ public class AddCoursePageActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<AdminRegister> call, Throwable t) {
-                Toast.makeText(AddCoursePageActivity.this, "Network Error!", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                Log.e("RegisterAdmin", "Network error: " + t.getMessage(), t);
+                Toast.makeText(AddCoursePageActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 }

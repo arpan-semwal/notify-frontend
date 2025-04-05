@@ -3,96 +3,143 @@ package com.example.notification.Dashboard.AdminDashboard;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.notification.R;
 import com.example.notification.auth.Admin.Login.AdminLoginPageActivity;
-import java.util.Arrays;
+import com.example.notification.network.RetrofitClient;
+import com.example.notification.models.MessageRequest;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
-    private Spinner spinnerClass, spinnerCourse;
+    private Spinner spinnerSelection;
     private EditText etMessage;
     private Button btnSendMessage, btnLogout;
+    private TextView tvSchoolName;
 
-    private String selectedClass, selectedCourse;
+    private String selectedCourse;
+    private List<String> selectedCourses = new ArrayList<>();
+    private String schoolName;
+    private String schoolUniqueId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
-        spinnerClass = findViewById(R.id.spinner_class);
-        spinnerCourse = findViewById(R.id.spinner_course);
+        spinnerSelection = findViewById(R.id.spinner_selection);
         etMessage = findViewById(R.id.et_message);
         btnSendMessage = findViewById(R.id.btn_send_message);
-        btnLogout = findViewById(R.id.btn_logout); // ✅ Logout button
+        btnLogout = findViewById(R.id.btn_logout);
+        tvSchoolName = findViewById(R.id.tv_school_name);
 
-        // Sample data for spinners
-        List<String> classList = Arrays.asList("Class 1", "Class 2", "Class 3");
-        List<String> courseList = Arrays.asList("Math", "Science", "English");
+        loadAdminData();
+        setupSpinner();
 
-        // Setup adapters for spinners
-        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, classList);
-        classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerClass.setAdapter(classAdapter);
-
-        ArrayAdapter<String> courseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, courseList);
-        courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCourse.setAdapter(courseAdapter);
-
-        // Spinner item selection listeners
-        spinnerClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedClass = classList.get(position);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        spinnerCourse.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedCourse = courseList.get(position);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        // Button Click Listener for Sending Message
-        btnSendMessage.setOnClickListener(v -> {
-            String message = etMessage.getText().toString().trim();
-
-            if (selectedClass == null || selectedCourse == null || message.isEmpty()) {
-                Toast.makeText(AdminDashboardActivity.this, "Please select class, course, and enter a message!", Toast.LENGTH_SHORT).show();
-            } else {
-                // Here, you can call your API to send the message
-                Toast.makeText(AdminDashboardActivity.this, "Message sent to " + selectedClass + " - " + selectedCourse, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // ✅ Logout Button Click Listener
+        btnSendMessage.setOnClickListener(v -> sendMessage());
         btnLogout.setOnClickListener(v -> logoutAdmin());
+    }
+
+    private void loadAdminData() {
+        SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
+        schoolName = prefs.getString("schoolName", "Unknown School");
+        schoolUniqueId = prefs.getString("schoolUniqueId", "Unknown ID");
+
+        tvSchoolName.setText("School: " + schoolName + "\nUnique ID: " + schoolUniqueId);
+
+        String selectedCoursesJson = prefs.getString("selectedCourses", "[]");
+        Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+        selectedCourses = new Gson().fromJson(selectedCoursesJson, listType);
+    }
+
+    private void setupSpinner() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectedCourses);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSelection.setAdapter(adapter);
+
+        spinnerSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedCourse = selectedCourses.get(position);
+                Toast.makeText(AdminDashboardActivity.this, "Selected Course: " + selectedCourse, Toast.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(android.R.id.content), "Selected Course: " + selectedCourse, Snackbar.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedCourse = null;
+            }
+        });
+    }
+
+    private void sendMessage() {
+        String messageContent = etMessage.getText().toString().trim();
+
+        if (messageContent.isEmpty()) {
+            Toast.makeText(this, "Enter a message!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (selectedCourse == null || selectedCourse.equals("No Courses Found")) {
+            Toast.makeText(this, "Select a valid course!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // ✅ Use schoolUniqueId instead of schoolName
+        MessageRequest request = new MessageRequest(schoolUniqueId, selectedCourse, messageContent);
+
+        RetrofitClient.getInstance().getApiService().sendMessage(request)
+                .enqueue(new Callback<Map<String, String>>() {
+                    @Override
+                    public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String message = response.body().get("message");
+                            Toast.makeText(AdminDashboardActivity.this, "✅ " + message, Toast.LENGTH_LONG).show();
+                        } else {
+                            Log.e("API_ERROR", "Response Code: " + response.code());
+                            Toast.makeText(AdminDashboardActivity.this, "❌ Failed to send message!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Map<String, String>> call, Throwable t) {
+                        Toast.makeText(AdminDashboardActivity.this, "❌ Network error! But check if message is saved.", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(android.R.id.content), "Network Issue! Try Again Later.", Snackbar.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private void logoutAdmin() {
         SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean("isLoggedIn", false);  // ✅ Clear login session
+        editor.clear();
         editor.apply();
 
-        Toast.makeText(AdminDashboardActivity.this, "Logged out successfully!", Toast.LENGTH_SHORT).show();
-
-        // Redirect to login screen
-        startActivity(new Intent(AdminDashboardActivity.this, AdminLoginPageActivity.class));
-        finish(); // ✅ Prevent going back to Dashboard after logout
+        Intent intent = new Intent(this, AdminLoginPageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

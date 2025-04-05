@@ -6,26 +6,25 @@
     android:padding="20dp"
     android:orientation="vertical">
 
+
+    <TextView
+        android:id="@+id/tv_school_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="School: Loading..."
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:layout_marginTop="8dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Class"
+        android:text="Select Class/Course"
         android:textSize="16sp"/>
 
     <Spinner
-        android:id="@+id/spinner_class"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Course"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"/>
-
-    <Spinner
-        android:id="@+id/spinner_course"
+        android:id="@+id/spinner_selection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -51,7 +50,6 @@
         android:layout_height="wrap_content"
         android:text="Send Message"
         android:layout_marginTop="20dp"/>
-
 
     <Button
         android:id="@+id/btn_logout"

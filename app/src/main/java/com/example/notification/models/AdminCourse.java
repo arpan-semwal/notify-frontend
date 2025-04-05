@@ -1,4 +1,4 @@
-package com.example.notification.network;
+package com.example.notification.models;
 
 public class AdminCourse {
     private String courseName;

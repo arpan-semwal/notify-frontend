@@ -2,9 +2,10 @@ package com.example.notification.auth.Admin.Register;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.notification.R;
@@ -13,13 +14,14 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
 
     private EditText etSchoolName, etCity, etAddress, etMobileNumber, etSchoolEmail, etPassword;
     private Button btnNext;
+    private RadioGroup rgInstitutionType;
+    private String institutionType = "School"; // Default selection
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_register);
 
-        // Initialize Views
         etSchoolName = findViewById(R.id.et_school_name);
         etCity = findViewById(R.id.et_city);
         etAddress = findViewById(R.id.et_address);
@@ -27,6 +29,15 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
         etSchoolEmail = findViewById(R.id.et_school_email);
         etPassword = findViewById(R.id.et_password);
         btnNext = findViewById(R.id.btn_next);
+        rgInstitutionType = findViewById(R.id.rgInstitutionType);
+
+        rgInstitutionType.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rbSchool) {
+                institutionType = "School";
+            } else if (checkedId == R.id.rbCollege) {
+                institutionType = "College";
+            }
+        });
 
         btnNext.setOnClickListener(v -> proceedToAddCoursePage());
     }
@@ -45,14 +56,15 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
             return;
         }
 
-        // Passing data to AddCoursePageActivity
-        Intent intent = new Intent(AdminRegisterPageActivity.this, AddCoursePageActivity.class);
+        Intent intent = new Intent(this, AddCoursePageActivity.class);
         intent.putExtra("schoolName", schoolName);
         intent.putExtra("city", city);
         intent.putExtra("address", address);
         intent.putExtra("mobileNumber", mobileNumber);
         intent.putExtra("email", email);
         intent.putExtra("password", password);
+        intent.putExtra("institutionType", institutionType);
+
         startActivity(intent);
     }
 }
