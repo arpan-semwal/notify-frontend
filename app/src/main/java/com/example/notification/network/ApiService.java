@@ -11,11 +11,10 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 import com.example.notification.models.AdminRegister;
-import com.example.notification.network.LoginResponse;
 import com.example.notification.models.MessageRequest;
 import com.example.notification.models.MessageResponse;
 import com.example.notification.models.StudentRegister;
-import com.example.notification.network.UserRequest;
+import com.example.notification.models.SchoolResponse;  // ✅ New model to handle schoolName and uniqueId
 
 public interface ApiService {
 
@@ -23,15 +22,12 @@ public interface ApiService {
     @POST("api/users/login")
     Call<LoginResponse> loginUser(@Body UserRequest userRequest);
 
-    // ✅ Fetch messages based on school and course
+    // ✅ Fetch messages based on schoolUniqueId and course
     @GET("/api/messages/fetch")
     Call<List<MessageResponse>> getMessages(
-            @Query("schoolName") String schoolName,
+            @Query("schoolUniqueId") String schoolUniqueId,  // ✅ Changed to schoolUniqueId
             @Query("course") String course
     );
-
-
-
 
     // ✅ Send message (used by admin panel)
     @POST("/api/messages/send")
@@ -39,17 +35,17 @@ public interface ApiService {
 
     // ✅ Register new admin
     @POST("/api/admin/register")
-    Call<AdminRegister> registerAdmin(@Body AdminRegister adminRegister);
+    Call<RegisterResponse> registerAdmin(@Body AdminRegister adminRegister);
 
     // ✅ Register new student
     @POST("api/student/register")
     Call<StudentRegister> registerStudent(@Body StudentRegister student);
 
-    // ✅ Fetch all school names
+    // ✅ Fetch all schools with uniqueId
     @GET("/api/schools/all")
-    Call<List<String>> getSchoolNames();
+    Call<List<SchoolResponse>> getAllSchools();  // ✅ Returns list of SchoolResponse with uniqueId and name
 
-    // ✅ Fetch all courses for a specific school
-    @GET("/api/fetchstudentcourse/{schoolName}")
-    Call<List<String>> getCoursesBySchool(@Path("schoolName") String schoolName);
+    // ✅ Fetch all courses for a specific school using schoolUniqueId
+    @GET("/api/fetchstudentcourse/{schoolUniqueId}")
+    Call<List<String>> getCoursesBySchool(@Path("schoolUniqueId") String schoolUniqueId);  // ✅ Uses uniqueId
 }

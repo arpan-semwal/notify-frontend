@@ -1,37 +1,35 @@
 package com.example.notification.models;
 
 public class MessageRequest {
-    private String schoolName;  // ✅ Add this field
+
+    private String schoolUniqueId;  // ✅ Changed from schoolName to schoolUniqueId
     private String course;
     private String message;
 
-    // ✅ Constructor
-    public MessageRequest(String schoolName, String course, String message) {
-        this.schoolName = schoolName;
+    public MessageRequest(String schoolUniqueId, String course, String message) {
+        this.schoolUniqueId = schoolUniqueId;
         this.course = course;
         this.message = message;
     }
 
-    // ✅ Getters
-    public String getSchoolName() {
-        return schoolName;
+    public String getSchoolUniqueId() {
+        return schoolUniqueId;
+    }
+
+    public void setSchoolUniqueId(String schoolUniqueId) {
+        this.schoolUniqueId = schoolUniqueId;
     }
 
     public String getCourse() {
         return course;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    // ✅ Setters
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
-    }
-
     public void setCourse(String course) {
         this.course = course;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public void setMessage(String message) {

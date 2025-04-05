@@ -9,6 +9,7 @@ import com.example.notification.models.LocalMessage;
 
 @Database(entities = {LocalMessage.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
+
     public abstract LocalMessageDao localMessageDao();
 
     private static volatile AppDatabase INSTANCE;

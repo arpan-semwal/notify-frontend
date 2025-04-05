@@ -1,12 +1,12 @@
 package com.example.notification.models;
 
 public class MessageResponse {
-    private String schoolName;
+    private String schoolUniqueId;
     private String course;
     private String content;
 
-    public String getSchoolName() {
-        return schoolName;
+    public String getSchoolUniqueId() {
+        return schoolUniqueId;
     }
 
     public String getCourse() {

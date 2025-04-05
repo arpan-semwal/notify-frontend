@@ -14,6 +14,7 @@ import com.example.notification.Dashboard.AdminDashboard.AdminDashboardActivity;
 import com.example.notification.R;
 import com.example.notification.models.AdminRegister;
 import com.example.notification.network.ApiService;
+import com.example.notification.network.RegisterResponse;
 import com.example.notification.network.RetrofitClient;
 import com.google.gson.Gson;
 import java.util.ArrayList;
@@ -109,26 +110,24 @@ public class AddCoursePageActivity extends AppCompatActivity {
         AdminRegister admin = new AdminRegister(schoolName, city, address, mobileNumber, email, password, institutionType, courseList);
         Log.d("RegisterAdmin", "Sending data: " + new Gson().toJson(admin));
 
-        apiService.registerAdmin(admin).enqueue(new Callback<AdminRegister>() {
+        apiService.registerAdmin(admin).enqueue(new Callback<RegisterResponse>() {
             @Override
-            public void onResponse(Call<AdminRegister> call, Response<AdminRegister> response) {
+            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    AdminRegister registeredAdmin = response.body();
-                    String institutionId = registeredAdmin.getInstitutionId();
+                    RegisterResponse registerResponse = response.body();
+                    String institutionId = registerResponse.getUniqueId();
 
                     Log.d("RegisterAdmin", "Institution ID: " + institutionId);
                     Toast.makeText(AddCoursePageActivity.this, "Registered Successfully!", Toast.LENGTH_LONG).show();
 
-                    // ✅ Save to SharedPreferences
                     SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("isLoggedIn", true);
-                    editor.putString("institutionId", institutionId);
-                    editor.putString("schoolName", schoolName); // ✅ Save schoolName
+                    editor.putString("schoolUniqueId", institutionId);
+                    editor.putString("schoolName", schoolName);
                     editor.putString("selectedCourses", new Gson().toJson(selectedCourses));
                     editor.apply();
 
-                    // ✅ Pass schoolName via Intent as well
                     Intent dashboardIntent = new Intent(AddCoursePageActivity.this, AdminDashboardActivity.class);
                     dashboardIntent.putExtra("schoolName", schoolName);
                     startActivity(dashboardIntent);
@@ -139,9 +138,12 @@ public class AddCoursePageActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<AdminRegister> call, Throwable t) {
-                Toast.makeText(AddCoursePageActivity.this, "Network Error!", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                Log.e("RegisterAdmin", "Network error: " + t.getMessage(), t);
+                Toast.makeText(AddCoursePageActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 }

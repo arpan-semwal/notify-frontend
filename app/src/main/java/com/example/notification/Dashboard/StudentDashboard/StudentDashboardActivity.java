@@ -28,49 +28,62 @@ public class StudentDashboardActivity extends AppCompatActivity {
     private TextView tvMessages;
     private ApiService apiService;
     private AppDatabase db;
-    private String schoolName, course;
+    private String schoolUniqueId, course;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_dashboard);
+        try {
+            setContentView(R.layout.activity_student_dashboard);
 
-        tvMessages = findViewById(R.id.tv_messages);
-        db = AppDatabase.getInstance(this);
-        apiService = RetrofitClient.getInstance().getApiService();
+            tvMessages = findViewById(R.id.tv_messages);
+            db = AppDatabase.getInstance(this);
+            apiService = RetrofitClient.getInstance().getApiService();
 
-        schoolName = getIntent().getStringExtra("schoolName");
-        course = getIntent().getStringExtra("course");
+            // Get schoolUniqueId and course from the intent
+            schoolUniqueId = getIntent().getStringExtra("schoolUniqueId");
+            course = getIntent().getStringExtra("course");
 
-        if (schoolName == null || course == null) {
-            Toast.makeText(this, "Missing school or course information.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+            if (schoolUniqueId == null || course == null) {
+                Toast.makeText(this, "Missing school or course information.", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
 
-        if (NetworkUtil.isInternetAvailable(this)) {
-            fetchMessagesFromServer();
-        } else {
-            Toast.makeText(this, "Offline mode: showing saved messages.", Toast.LENGTH_SHORT).show();
-            fetchMessagesFromLocalDb();
+            Log.d("StudentDashboard", "schoolUniqueId: " + schoolUniqueId + ", course: " + course);
+
+            // Check internet availability and fetch messages accordingly
+            if (NetworkUtil.isInternetAvailable(this)) {
+                fetchMessagesFromServer();
+            } else {
+                Toast.makeText(this, "Offline mode: showing saved messages.", Toast.LENGTH_SHORT).show();
+                fetchMessagesFromLocalDb();
+            }
+        } catch (Exception e) {
+            Log.e("StudentDashboard", "Error in onCreate", e);
+            finish();  // Finish the activity if there's an error
         }
     }
 
     private void fetchMessagesFromServer() {
-        apiService.getMessages(schoolName, course).enqueue(new Callback<List<MessageResponse>>() {
+        Log.d("StudentDashboard", "Fetching messages from server...");
+
+        apiService.getMessages(schoolUniqueId, course).enqueue(new Callback<List<MessageResponse>>() {
             @Override
             public void onResponse(Call<List<MessageResponse>> call, Response<List<MessageResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     new Thread(() -> {
-                        List<LocalMessage> existingMessages = db.localMessageDao().getMessages(schoolName, course);
+                        List<LocalMessage> existingMessages = db.localMessageDao().getMessages(schoolUniqueId, course);
                         Set<String> existingSet = new HashSet<>();
                         for (LocalMessage m : existingMessages) {
                             existingSet.add(m.getMessage());
                         }
 
+                        // Insert new messages that are not already saved locally
                         for (MessageResponse messageResponse : response.body()) {
                             if (!existingSet.contains(messageResponse.getContent())) {
                                 LocalMessage localMessage = new LocalMessage(
-                                        messageResponse.getSchoolName(),
+                                        messageResponse.getSchoolUniqueId(),
                                         messageResponse.getCourse(),
                                         messageResponse.getContent()
                                 );
@@ -78,7 +91,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
                             }
                         }
 
-                        runOnUiThread(StudentDashboardActivity.this::fetchMessagesFromLocalDb);
+                        runOnUiThread(() -> fetchMessagesFromLocalDb());
                     }).start();
                 } else {
                     Log.e("StudentDashboard", "Server response unsuccessful");
@@ -95,18 +108,24 @@ public class StudentDashboardActivity extends AppCompatActivity {
     }
 
     private void fetchMessagesFromLocalDb() {
+        Log.d("StudentDashboard", "Fetching messages from local DB...");
+
         new Thread(() -> {
-            List<LocalMessage> messages = db.localMessageDao().getMessages(schoolName, course);
+            List<LocalMessage> messages = db.localMessageDao().getMessages(schoolUniqueId, course);
             StringBuilder messageContent = new StringBuilder();
 
+            // Prepare the message content for display
             for (LocalMessage message : messages) {
                 messageContent.append("• ").append(message.getMessage()).append("\n\n");
             }
 
             runOnUiThread(() -> {
+                // Display messages or show a "No messages" message
                 if (messages.isEmpty()) {
+                    Log.d("StudentDashboard", "No messages found.");
                     tvMessages.setText("No messages found.");
                 } else {
+                    Log.d("StudentDashboard", "Messages found: " + messages.size());
                     tvMessages.setText(messageContent.toString());
                 }
             });

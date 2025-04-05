@@ -4,20 +4,20 @@ public class Message {
     private Long id;
     private Long userId;
     private String content;
-    private String schoolName;
+    private String schoolUniqueId;
     private String timestamp;
 
-    public Message(Long id, Long userId, String content, String schoolName, String timestamp) {
+    public Message(Long id, Long userId, String content, String schoolUniqueId, String timestamp) {
         this.id = id;
         this.userId = userId;
         this.content = content;
-        this.schoolName = schoolName;
+        this.schoolUniqueId = schoolUniqueId;
         this.timestamp = timestamp;
     }
 
     public Long getId() { return id; }
     public Long getUserId() { return userId; }
-    public String getContent() { return content; } // ✅ Correct method
-    public String getSchoolName() { return schoolName; } // ✅ Correct method
+    public String getContent() { return content; }
+    public String getSchoolUniqueId() { return schoolUniqueId; }
     public String getTimestamp() { return timestamp; }
 }

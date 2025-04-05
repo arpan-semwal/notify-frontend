@@ -1,37 +1,59 @@
 package com.example.notification.models;
 
-
-
-
 public class StudentRegister {
     private String name;
     private String fatherName;
-    private String schoolName;
-    
-    private String course;
     private String mobileNumber;
+    private String course;
+    private String schoolUniqueId;
 
-    // Constructor
-    public StudentRegister(String name, String fatherName, String schoolName,  String course , String mobileNumber) {
+    // Constructor for registration
+    public StudentRegister(String name, String fatherName, String course, String mobileNumber, String schoolUniqueId) {
         this.name = name;
         this.fatherName = fatherName;
-        this.schoolName = schoolName;
         this.course = course;
         this.mobileNumber = mobileNumber;
-        
+        this.schoolUniqueId = schoolUniqueId;
     }
 
-    // Getters
-    public String getName() { return name; }
-    public String getFatherName() { return fatherName; }
-    public String getSchoolName() { return schoolName; }
-    public String getCourse(){return course;}
-    public String getMobileNumber() { return mobileNumber; }
+    // Getters and setters (if needed)
+    public String getName() {
+        return name;
+    }
 
-    // Setters
-    public void setName(String name) { this.name = name; }
-    public void setFatherName(String fatherName) { this.fatherName = fatherName; }
-    public void setSchoolName(String schoolName) { this.schoolName = schoolName; }
-    public void setCourse(String course){this.course = course;}
-    public void setMobileNumber(String mobileNumber) { this.mobileNumber = mobileNumber; }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFatherName() {
+        return fatherName;
+    }
+
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public String getSchoolUniqueId() {
+        return schoolUniqueId;
+    }
+
+    public void setSchoolUniqueId(String schoolUniqueId) {
+        this.schoolUniqueId = schoolUniqueId;
+    }
 }

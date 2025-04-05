@@ -41,7 +41,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
     private String selectedCourse;
     private List<String> selectedCourses = new ArrayList<>();
-    private String schoolName;  // ✅ Store admin's school name
+    private String schoolName;
+    private String schoolUniqueId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +53,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
         etMessage = findViewById(R.id.et_message);
         btnSendMessage = findViewById(R.id.btn_send_message);
         btnLogout = findViewById(R.id.btn_logout);
-        tvSchoolName = findViewById(R.id.tv_school_name); // ✅ TextView for school name
+        tvSchoolName = findViewById(R.id.tv_school_name);
 
-        loadAdminData(); // ✅ Load school name and courses
-        setupSpinner();  // ✅ Setup course selection
+        loadAdminData();
+        setupSpinner();
 
         btnSendMessage.setOnClickListener(v -> sendMessage());
         btnLogout.setOnClickListener(v -> logoutAdmin());
@@ -63,15 +64,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
     private void loadAdminData() {
         SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
-        schoolName = prefs.getString("schoolName", null);
+        schoolName = prefs.getString("schoolName", "Unknown School");
+        schoolUniqueId = prefs.getString("schoolUniqueId", "Unknown ID");
 
-        if (schoolName == null) {
-            Log.e("AdminDashboard", "School name is null, setting default value.");
-            schoolName = "Unknown School";  // ✅ Prevent null values
-        }
-
-        // ✅ Display on the screen
-        tvSchoolName.setText("School: " + schoolName);
+        tvSchoolName.setText("School: " + schoolName + "\nUnique ID: " + schoolUniqueId);
 
         String selectedCoursesJson = prefs.getString("selectedCourses", "[]");
         Type listType = new TypeToken<ArrayList<String>>() {}.getType();
@@ -87,8 +83,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedCourse = selectedCourses.get(position);
-                System.out.println("✅ Selected Course: " + selectedCourse);
-
                 Toast.makeText(AdminDashboardActivity.this, "Selected Course: " + selectedCourse, Toast.LENGTH_SHORT).show();
                 Snackbar.make(findViewById(android.R.id.content), "Selected Course: " + selectedCourse, Snackbar.LENGTH_SHORT).show();
             }
@@ -113,11 +107,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
             return;
         }
 
-        MessageRequest request = new MessageRequest(schoolName, selectedCourse, messageContent);
+        // ✅ Use schoolUniqueId instead of schoolName
+        MessageRequest request = new MessageRequest(schoolUniqueId, selectedCourse, messageContent);
 
         RetrofitClient.getInstance().getApiService().sendMessage(request)
                 .enqueue(new Callback<Map<String, String>>() {
-
                     @Override
                     public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
                         if (response.isSuccessful() && response.body() != null) {
@@ -125,7 +119,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
                             Toast.makeText(AdminDashboardActivity.this, "✅ " + message, Toast.LENGTH_LONG).show();
                         } else {
                             Log.e("API_ERROR", "Response Code: " + response.code());
-                            Log.e("API_ERROR", "Error Body: " + response.errorBody());
                             Toast.makeText(AdminDashboardActivity.this, "❌ Failed to send message!", Toast.LENGTH_SHORT).show();
                         }
                     }

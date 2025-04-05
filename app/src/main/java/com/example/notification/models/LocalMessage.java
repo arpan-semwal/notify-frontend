@@ -10,8 +10,8 @@ public class LocalMessage {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @ColumnInfo(name = "school_name")
-    private String schoolName;
+    @ColumnInfo(name = "school_unique_id")
+    private String schoolUniqueId;
 
     @ColumnInfo(name = "course")
     private String course;
@@ -23,8 +23,8 @@ public class LocalMessage {
     public LocalMessage() {}
 
     // Custom constructor (optional)
-    public LocalMessage(String schoolName, String course, String message) {
-        this.schoolName = schoolName;
+    public LocalMessage(String schoolUniqueId, String course, String message) {
+        this.schoolUniqueId = schoolUniqueId;
         this.course = course;
         this.message = message;
     }
@@ -39,12 +39,12 @@ public class LocalMessage {
         this.id = id;
     }
 
-    public String getSchoolName() {
-        return schoolName;
+    public String getSchoolUniqueId() {
+        return schoolUniqueId;
     }
 
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
+    public void setSchoolUniqueId(String schoolUniqueId) {
+        this.schoolUniqueId = schoolUniqueId;
     }
 
     public String getCourse() {
