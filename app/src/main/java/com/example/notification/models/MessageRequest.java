@@ -1,14 +1,15 @@
 package com.example.notification.models;
 
 public class MessageRequest {
-
-    private String schoolUniqueId;  // ✅ Changed from schoolName to schoolUniqueId
-    private String course;
+    private String schoolUniqueId;
+    private String courseUniqueId; // ✅ Changed to courseUniqueId
     private String message;
 
-    public MessageRequest(String schoolUniqueId, String course, String message) {
+    public MessageRequest() {}
+
+    public MessageRequest(String schoolUniqueId, String courseUniqueId, String message) {
         this.schoolUniqueId = schoolUniqueId;
-        this.course = course;
+        this.courseUniqueId = courseUniqueId;
         this.message = message;
     }
 
@@ -20,12 +21,12 @@ public class MessageRequest {
         this.schoolUniqueId = schoolUniqueId;
     }
 
-    public String getCourse() {
-        return course;
+    public String getCourseUniqueId() {
+        return courseUniqueId;
     }
 
-    public void setCourse(String course) {
-        this.course = course;
+    public void setCourseUniqueId(String courseUniqueId) {
+        this.courseUniqueId = courseUniqueId;
     }
 
     public String getMessage() {

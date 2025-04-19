@@ -3,7 +3,6 @@ package com.example.notification.models;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 @Entity(tableName = "local_messages")
 public class LocalMessage {
 
@@ -13,53 +12,28 @@ public class LocalMessage {
     @ColumnInfo(name = "school_unique_id")
     private String schoolUniqueId;
 
-    @ColumnInfo(name = "course")
-    private String course;
+    @ColumnInfo(name = "course_unique_id")  // Updated field name
+    private String courseUniqueId;
 
     @ColumnInfo(name = "message")
     private String message;
 
-    // Default constructor (Room requires this)
-    public LocalMessage() {}
-
-    // Custom constructor (optional)
-    public LocalMessage(String schoolUniqueId, String course, String message) {
+    public LocalMessage(String schoolUniqueId, String courseUniqueId, String message) {
         this.schoolUniqueId = schoolUniqueId;
-        this.course = course;
+        this.courseUniqueId = courseUniqueId;  // Updated constructor
         this.message = message;
     }
 
-    // Getters and Setters
+    // Getters and setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public int getId() {
-        return id;
-    }
+    public String getSchoolUniqueId() { return schoolUniqueId; }
+    public void setSchoolUniqueId(String schoolUniqueId) { this.schoolUniqueId = schoolUniqueId; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getCourseUniqueId() { return courseUniqueId; }  // Updated getter
+    public void setCourseUniqueId(String courseUniqueId) { this.courseUniqueId = courseUniqueId; }  // Updated setter
 
-    public String getSchoolUniqueId() {
-        return schoolUniqueId;
-    }
-
-    public void setSchoolUniqueId(String schoolUniqueId) {
-        this.schoolUniqueId = schoolUniqueId;
-    }
-
-    public String getCourse() {
-        return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
 }

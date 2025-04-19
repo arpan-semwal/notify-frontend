@@ -9,9 +9,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.notification.R;
-
 public class AdminRegisterPageActivity extends AppCompatActivity {
-
     private EditText etSchoolName, etCity, etAddress, etMobileNumber, etSchoolEmail, etPassword;
     private Button btnNext;
     private RadioGroup rgInstitutionType;

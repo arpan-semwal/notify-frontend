@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.okhttp.logging)
     annotationProcessor(libs.room.compiler)
 
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+
 
 }
 

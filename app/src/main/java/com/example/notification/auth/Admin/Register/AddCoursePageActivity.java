@@ -9,27 +9,35 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.notification.Dashboard.AdminDashboard.AdminDashboardActivity;
 import com.example.notification.R;
+import com.example.notification.models.AdminCourse;
 import com.example.notification.models.AdminRegister;
 import com.example.notification.network.ApiService;
 import com.example.notification.network.RegisterResponse;
 import com.example.notification.network.RetrofitClient;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.apache.commons.lang3.RandomStringUtils; // ✅ Import this for random string
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.example.notification.models.AdminCourse;
 
 public class AddCoursePageActivity extends AppCompatActivity {
-
     private AutoCompleteTextView etCourseName;
     private TextView tvSelectedCourses;
     private Button btnAddCourse, btnRegister;
     private List<String> selectedCourses = new ArrayList<>();
+    private List<AdminCourse> courseList = new ArrayList<>();
     private ArrayAdapter<String> coursesAdapter;
     private ApiService apiService;
 
@@ -50,9 +58,8 @@ public class AddCoursePageActivity extends AppCompatActivity {
         password = intent.getStringExtra("password");
         institutionType = intent.getStringExtra("institutionType");
 
-        // Ensure institutionType is not null
         if (institutionType == null || institutionType.isEmpty()) {
-            institutionType = "School";  // Default value if missing
+            institutionType = "School";
         }
 
         // Initialize UI elements
@@ -63,7 +70,7 @@ public class AddCoursePageActivity extends AppCompatActivity {
 
         apiService = RetrofitClient.getInstance().getApiService();
 
-        // Predefined course list
+        // Sample courses for selection
         List<String> allCourses = new ArrayList<>();
         allCourses.add("B.Tech in Computer Science");
         allCourses.add("B.Tech in Civil Engineering");
@@ -72,11 +79,9 @@ public class AddCoursePageActivity extends AppCompatActivity {
         allCourses.add("BBA in Marketing");
         allCourses.add("B.Com in Accounting and Finance");
 
-        // Set up dropdown adapter
         coursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, allCourses);
         etCourseName.setAdapter(coursesAdapter);
 
-        // Button click listeners
         btnAddCourse.setOnClickListener(v -> addCourse());
         btnRegister.setOnClickListener(v -> registerAdmin());
     }
@@ -84,14 +89,16 @@ public class AddCoursePageActivity extends AppCompatActivity {
     private void addCourse() {
         String courseName = etCourseName.getText().toString().trim();
         if (!courseName.isEmpty() && !selectedCourses.contains(courseName)) {
+            AdminCourse course = new AdminCourse(courseName); // ✅ No unique ID here
             selectedCourses.add(courseName);
+            courseList.add(course);
+
             updateSelectedCoursesDisplay();
             etCourseName.setText("");
         } else {
             Toast.makeText(this, "Course already selected or empty!", Toast.LENGTH_SHORT).show();
         }
     }
-
     private void updateSelectedCoursesDisplay() {
         tvSelectedCourses.setText(selectedCourses.isEmpty() ? "Selected Courses: " : "Selected: " + String.join(", ", selectedCourses));
     }
@@ -100,11 +107,6 @@ public class AddCoursePageActivity extends AppCompatActivity {
         if (selectedCourses.isEmpty()) {
             Toast.makeText(this, "Please select at least one course!", Toast.LENGTH_SHORT).show();
             return;
-        }
-
-        List<AdminCourse> courseList = new ArrayList<>();
-        for (String courseName : selectedCourses) {
-            courseList.add(new AdminCourse(courseName));
         }
 
         AdminRegister admin = new AdminRegister(schoolName, city, address, mobileNumber, email, password, institutionType, courseList);
@@ -125,9 +127,13 @@ public class AddCoursePageActivity extends AppCompatActivity {
                     editor.putBoolean("isLoggedIn", true);
                     editor.putString("schoolUniqueId", institutionId);
                     editor.putString("schoolName", schoolName);
-                    editor.putString("selectedCourses", new Gson().toJson(selectedCourses));
+
+                    // Store courses list in SharedPreferences as JSON
+                    String coursesJson = new Gson().toJson(courseList);
+                    editor.putString("selectedCourses", coursesJson); // Save as JSON string
                     editor.apply();
 
+                    // Navigate to the dashboard
                     Intent dashboardIntent = new Intent(AddCoursePageActivity.this, AdminDashboardActivity.class);
                     dashboardIntent.putExtra("schoolName", schoolName);
                     startActivity(dashboardIntent);
@@ -143,7 +149,5 @@ public class AddCoursePageActivity extends AppCompatActivity {
                 Toast.makeText(AddCoursePageActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 }
