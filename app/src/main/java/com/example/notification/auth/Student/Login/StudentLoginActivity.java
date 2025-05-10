@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.notification.HomePageActivity;
 import com.example.notification.R;
 import com.example.notification.auth.Student.Register.StudentRegisterActivity;
@@ -31,7 +30,7 @@ public class StudentLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         edtSchoolName = findViewById(R.id.SchoolName);
-        edtRegistration = findViewById(R.id.RegistrationNumber);
+
         edtMobile = findViewById(R.id.MobileNumber);
         txtRegister = findViewById(R.id.tv_register_link); // Correct ID from XML
 

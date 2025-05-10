@@ -34,29 +34,13 @@
         android:imeOptions="actionNext"
         />
 
-    <!-- Registration Number EditText -->
-    <EditText
-        android:id="@+id/RegistrationNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Registration Number"
-        android:layout_below="@+id/SchoolName"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"
-        android:padding="16dp"
-        android:background="@android:drawable/editbox_background"
-        android:textColor="@color/black"
-        android:singleLine="true"
-        android:imeOptions="actionNext"
-        />
-
     <!-- Mobile Number EditText -->
     <EditText
         android:id="@+id/MobileNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Mobile Number"
-        android:layout_below="@+id/RegistrationNumber"
+        android:layout_below="@+id/SchoolName"
         android:textSize="16sp"
         android:layout_marginTop="10dp"
         android:padding="16dp"

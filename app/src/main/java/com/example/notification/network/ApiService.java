@@ -11,6 +11,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 import com.example.notification.models.AdminCourse;
+import com.example.notification.models.AdminLoginRequest;
 import com.example.notification.models.AdminRegister;
 import com.example.notification.models.MessageRequest;
 import com.example.notification.models.MessageResponse;
@@ -20,7 +21,9 @@ import com.example.notification.models.SyncResponse;
 
 public interface ApiService {
 
-    // User login
+    // Use  // Admin login (ADDED)
+    @POST("api/admin/login")
+    Call<AdminLoginResponse> loginAdmin(@Body AdminLoginRequest request);
     @POST("api/users/login")
     Call<LoginResponse> loginUser(@Body UserRequest userRequest);
 
