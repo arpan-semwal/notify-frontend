@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="course_header">Course</string>
+    <string name="course_enter">Enter Course Name</string>
+    <string name="add_course">Add Course</string>
+    <string name="selected_course">Selected Courses</string>
+</resources>

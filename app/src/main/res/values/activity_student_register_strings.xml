@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="student_registeration">Student Registeration</string>
+    <string name="student_full_name">Full Name</string>
+    <string name="father_name">Father Name</string>
+    <string name="student_mobile_number">Student Mobile Number</string>
+
+
+</resources>

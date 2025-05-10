@@ -1,77 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="20dp">
+    android:layout_height="match_parent">
 
+    <!-- Background: Top Blue, Bottom White -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Student Registration"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="20dp"/>
-
-        <EditText
-            android:id="@+id/edt_name"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Full Name"
-            android:padding="12dp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#82B5E2" />
 
-        <EditText
-            android:id="@+id/edt_father_name"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Father's Name"
-            android:padding="12dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"/>
-
-        <!-- School Selection Dropdown -->
-        <Spinner
-            android:id="@+id/spinner_school_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"/>
-
-
-        <Spinner
-            android:id="@+id/spinner_course"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
-
-
-        <EditText
-            android:id="@+id/edt_mobile_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Mobile Number"
-            android:inputType="number"
-            android:maxLength="10"
-            android:padding="12dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"/>
-
-        <Button
-            android:id="@+id/btn_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Register"
-            android:padding="12dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@android:color/holo_blue_dark"
-            android:textColor="@android:color/white"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/white" />
     </LinearLayout>
-</ScrollView>
+
+    <!-- Scrollable Card Form -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="200dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingHorizontal="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/form_card_bg"
+            android:elevation="12dp"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:text="@string/student_registeration"
+                android:textColor="@android:color/black"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <!-- Fields -->
+            <EditText
+                android:id="@+id/edt_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/student_full_name"
+                android:padding="12dp"
+                android:layout_marginBottom="10dp"
+                android:background="@android:drawable/editbox_background"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/edt_father_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/father_name"
+                android:padding="12dp"
+                android:layout_marginBottom="10dp"
+                android:background="@android:drawable/editbox_background"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/spinner_school_name"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" />
+
+            <Spinner
+                android:id="@+id/spinner_course"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp" />
+
+            <EditText
+                android:id="@+id/edt_mobile_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/student_mobile_number"
+                android:inputType="number"
+                android:maxLength="10"
+                android:padding="12dp"
+                android:layout_marginBottom="20dp"
+                android:background="@android:drawable/editbox_background"
+                android:textColor="@android:color/black" />
+
+            <!-- Register Button at Bottom -->
+            <Button
+                android:id="@+id/btn_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Register"
+                android:backgroundTint="#2196F3"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:padding="14dp"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

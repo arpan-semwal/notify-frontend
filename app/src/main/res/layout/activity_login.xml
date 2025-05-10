@@ -1,92 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:padding="20dp">
+    android:layout_height="match_parent">
 
-    <!-- Login Heading -->
-    <TextView
-        android:id="@+id/login_heading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Student Login"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        />
-
-    <!-- School Name EditText -->
-    <EditText
-        android:id="@+id/SchoolName"
+    <!-- Background: Top Blue, Bottom White -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="School Name"
-        android:padding="16dp"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/login_heading"
-        android:background="@android:drawable/editbox_background"
-        android:textColor="@color/black"
-        android:singleLine="true"
-        android:imeOptions="actionNext"
-        />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <!-- Mobile Number EditText -->
-    <EditText
-        android:id="@+id/MobileNumber"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#82B5E2" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/white" />
+    </LinearLayout>
+
+    <!-- Scrollable Form that overlaps the top -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Mobile Number"
-        android:layout_below="@+id/SchoolName"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"
-        android:padding="16dp"
-        android:background="@android:drawable/editbox_background"
-        android:textColor="@color/black"
-        android:singleLine="true"
-        android:inputType="number"
-        android:maxLength="10"
-        android:imeOptions="actionDone"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="200dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingHorizontal="24dp">
 
-    <!-- Login Button -->
-    <Button
-        android:id="@+id/login_btn"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:padding="8dp"
-        android:textSize="14sp"
-        android:layout_below="@+id/MobileNumber"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/form_card_bg"
+            android:clipToPadding="false"
+            android:elevation="12dp"
+            android:orientation="vertical"
+            android:padding="24dp">
 
-    <!-- Horizontal Line Below Button -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_below="@id/login_btn"
-        android:layout_marginTop="10dp"/>
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="24dp"
+                android:text="Student Login"
+                android:textColor="@android:color/black"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-    <!-- Register Link TextView -->
-    <TextView
-        android:id="@+id/tv_register_link"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Not Registered? Register"
-        android:textSize="16sp"
-        android:textColor="@android:color/holo_blue_dark"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_below="@id/login_btn"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"/>
+            <!-- School Name EditText -->
+            <EditText
+                android:id="@+id/SchoolName"
+                style="@style/FormEditText"
+                android:autofillHints=""
+                android:hint="School Name"
+                android:inputType="text" />
 
+            <!-- Mobile Number EditText -->
+            <EditText
+                android:id="@+id/MobileNumber"
+                style="@style/FormEditText"
+                android:autofillHints=""
+                android:hint="Mobile Number"
+                android:inputType="number" />
 
+            <!-- Login Button -->
+            <Button
+                android:id="@+id/login_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#2196F3"
+                android:padding="14dp"
+                android:text="Login"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
 
+            <!-- Line -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"
+                android:layout_marginTop="10dp" />
 
-</RelativeLayout>
+            <!-- Register Link TextView -->
+            <TextView
+                android:id="@+id/tv_register_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Not Registered? Register"
+                android:textSize="16sp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"/>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

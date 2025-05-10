@@ -1,137 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="20dp"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
+    <!-- Background: Top Blue, Bottom White -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-
-        <RadioGroup
-            android:id="@+id/rgInstitutionType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rbSchool"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="School"
-                android:checked="true"/> <!-- Default checked -->
-
-            <RadioButton
-                android:id="@+id/rbCollege"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="College"/>
-        </RadioGroup>
-
-
-        <EditText
-            android:id="@+id/et_school_name"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="School Name"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="12dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#82B5E2" />
 
-        <EditText
-            android:id="@+id/et_city"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="City"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="12dp" />
-
-        <EditText
-            android:id="@+id/et_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Address"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="12dp" />
-
-        <EditText
-            android:id="@+id/et_mobile_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Mobile Number"
-            android:inputType="phone"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="12dp" />
-
-        <EditText
-            android:id="@+id/et_school_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="12dp" />
-
-        <EditText
-            android:id="@+id/et_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="12dp" />
-
-        <EditText
-            android:id="@+id/et_confirm_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Confirm Password"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="12dp" />
-
-        <TextView
-            android:id="@+id/tv_password_match_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FF0000"
-            android:text="Passwords do not match!"
-            android:visibility="gone"
-            android:layout_marginBottom="12dp"/>
-
-        <Button
-            android:id="@+id/btn_next"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Next"
-            android:padding="14dp"
-            android:textSize="16sp"
-            android:backgroundTint="@android:color/holo_blue_dark"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="12dp"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/white" />
     </LinearLayout>
-</ScrollView>
+
+    <!-- Scrollable Form that overlaps the top -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="200dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingHorizontal="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/form_card_bg"
+            android:clipToPadding="false"
+            android:elevation="12dp"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="24dp"
+                android:text="@string/Register"
+                android:textColor="@android:color/black"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+
+            <RadioGroup
+                android:id="@+id/rgInstitutionType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbSchool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/School_name" />
+
+                <RadioButton
+                    android:id="@+id/rbCollege"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/college" />
+            </RadioGroup>
+
+            <!-- All Fields -->
+            <EditText
+                android:id="@+id/et_school_name"
+                style="@style/FormEditText"
+                android:autofillHints=""
+                android:hint="@string/School_name"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/et_city"
+                style="@style/FormEditText"
+                android:autofillHints=""
+                android:hint="@string/hint_city"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/et_address"
+                style="@style/FormEditText"
+                android:autofillHints=""
+                android:hint="@string/hint_address"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/et_mobile_number"
+                style="@style/FormEditText"
+                android:autofillHints=""
+                android:hint="@string/hint_mobile_number"
+                android:inputType="phone" />
+
+            <EditText
+                android:id="@+id/et_school_email"
+                style="@style/FormEditText"
+                android:autofillHints="Email"
+                android:hint="@string/hint_school_email"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/et_password"
+                style="@style/FormEditText"
+                android:autofillHints=""
+                android:hint="@string/hint_password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/et_confirm_password"
+                style="@style/FormEditText"
+                android:autofillHints=""
+                android:hint="@string/hint_confirm_password"
+                android:inputType="textPassword" />
+
+            <!-- Password Error -->
+            <TextView
+                android:id="@+id/tv_password_match_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="@string/password_mismatch_error"
+                android:textColor="#FF0000"
+                android:visibility="gone" />
+
+            <!-- Button -->
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="#2196F3"
+                android:padding="14dp"
+                android:text="@string/btn_register"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

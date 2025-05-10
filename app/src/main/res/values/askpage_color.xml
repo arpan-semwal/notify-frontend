@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Custom color for Ask Page cards -->
-    <color name="askPage_card_color">#A3C7FF</color>
+    <color name="askPage_card_color">#82B5E2</color>
 </resources>
