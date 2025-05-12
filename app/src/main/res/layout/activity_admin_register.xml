@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Background: Top Blue, Bottom White -->
+    <!-- Background Split -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,7 +22,7 @@
             android:background="@android:color/white" />
     </LinearLayout>
 
-    <!-- Scrollable Form that overlaps the top -->
+    <!-- Registration Form -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -52,76 +52,51 @@
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
+            <!-- Spacer for visual balance -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
 
-            <RadioGroup
-                android:id="@+id/rgInstitutionType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/rbSchool"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/School_name" />
-
-                <RadioButton
-                    android:id="@+id/rbCollege"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/college" />
-            </RadioGroup>
-
-            <!-- All Fields -->
+            <!-- Input Fields -->
             <EditText
                 android:id="@+id/et_school_name"
                 style="@style/FormEditText"
-                android:autofillHints=""
                 android:hint="@string/School_name"
                 android:inputType="text" />
 
             <EditText
                 android:id="@+id/et_city"
                 style="@style/FormEditText"
-                android:autofillHints=""
                 android:hint="@string/hint_city"
                 android:inputType="text" />
 
             <EditText
                 android:id="@+id/et_address"
                 style="@style/FormEditText"
-                android:autofillHints=""
                 android:hint="@string/hint_address"
                 android:inputType="text" />
 
             <EditText
                 android:id="@+id/et_mobile_number"
                 style="@style/FormEditText"
-                android:autofillHints=""
                 android:hint="@string/hint_mobile_number"
                 android:inputType="phone" />
 
             <EditText
                 android:id="@+id/et_school_email"
                 style="@style/FormEditText"
-                android:autofillHints="Email"
                 android:hint="@string/hint_school_email"
                 android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/et_password"
                 style="@style/FormEditText"
-                android:autofillHints=""
                 android:hint="@string/hint_password"
                 android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/et_confirm_password"
                 style="@style/FormEditText"
-                android:autofillHints=""
                 android:hint="@string/hint_confirm_password"
                 android:inputType="textPassword" />
 
@@ -135,7 +110,7 @@
                 android:textColor="#FF0000"
                 android:visibility="gone" />
 
-            <!-- Button -->
+            <!-- Next Button -->
             <Button
                 android:id="@+id/btn_next"
                 android:layout_width="match_parent"

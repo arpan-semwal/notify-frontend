@@ -4,16 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.notification.R;
+
 public class AdminRegisterPageActivity extends AppCompatActivity {
     private EditText etSchoolName, etCity, etAddress, etMobileNumber, etSchoolEmail, etPassword;
     private Button btnNext;
-    private RadioGroup rgInstitutionType;
-    private String institutionType = "School"; // Default selection
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +26,6 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
         etSchoolEmail = findViewById(R.id.et_school_email);
         etPassword = findViewById(R.id.et_password);
         btnNext = findViewById(R.id.btn_next);
-        rgInstitutionType = findViewById(R.id.rgInstitutionType);
-
-        rgInstitutionType.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.rbSchool) {
-                institutionType = "School";
-            } else if (checkedId == R.id.rbCollege) {
-                institutionType = "College";
-            }
-        });
 
         btnNext.setOnClickListener(v -> proceedToAddCoursePage());
     }
@@ -61,7 +51,6 @@ public class AdminRegisterPageActivity extends AppCompatActivity {
         intent.putExtra("mobileNumber", mobileNumber);
         intent.putExtra("email", email);
         intent.putExtra("password", password);
-        intent.putExtra("institutionType", institutionType);
 
         startActivity(intent);
     }
