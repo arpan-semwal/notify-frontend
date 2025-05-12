@@ -36,7 +36,6 @@ android {
 }
 
 dependencies {
-    implementation("com.google.android.material:material:1.4.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -50,6 +49,9 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp.logging)
     annotationProcessor(libs.room.compiler)
+    implementation ("androidx.cardview:cardview:1.0.0")
+    implementation("com.google.android.material:material:1.4.0")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
 
 
 }

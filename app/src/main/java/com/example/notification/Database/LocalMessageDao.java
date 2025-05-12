@@ -15,6 +15,6 @@ public interface LocalMessageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMessage(LocalMessage message);
 
-    @Query("SELECT * FROM local_messages WHERE school_unique_id = :schoolUniqueId AND course = :course")
-    List<LocalMessage> getMessages(String schoolUniqueId, String course);
+    @Query("SELECT * FROM local_messages WHERE school_unique_id = :schoolUniqueId AND course_unique_id = :courseUniqueId")
+    List<LocalMessage> getMessages(String schoolUniqueId, String courseUniqueId);
 }

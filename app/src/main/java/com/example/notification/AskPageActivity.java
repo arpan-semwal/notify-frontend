@@ -13,31 +13,28 @@ import com.example.notification.auth.Student.Login.StudentLoginActivity;
 
 public class AskPageActivity extends AppCompatActivity {
 
-    private TextView tvStudentQuestion, tvSchoolQuestion;
+    private View cardSchool, cardStudent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // ✅ Check if user is already logged in
         SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
         boolean isLoggedIn = prefs.getBoolean("isLoggedIn", false);
 
         if (isLoggedIn) {
-            // ✅ Skip AskPageActivity & go to Dashboard
             startActivity(new Intent(AskPageActivity.this, AdminDashboardActivity.class));
-            finish(); // ✅ Close this activity
-            return; // ✅ Stop further execution
+            finish();
+            return;
         }
 
         setContentView(R.layout.ask_page);
 
-        // Initialize TextViews
-        tvSchoolQuestion = findViewById(R.id.tv_school_question);
-        tvStudentQuestion = findViewById(R.id.tv_student_question);
+        // Use CardViews for click listeners
+        cardSchool = findViewById(R.id.card_school);
+        cardStudent = findViewById(R.id.card_student);
 
-        // Click Listener for School (Navigates to AdminLoginPageActivity)
-        tvSchoolQuestion.setOnClickListener(new View.OnClickListener() {
+        cardSchool.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AskPageActivity.this, AdminLoginPageActivity.class);
@@ -45,8 +42,7 @@ public class AskPageActivity extends AppCompatActivity {
             }
         });
 
-        // Click Listener for Student (Navigates to StudentSignInActivity)
-        tvStudentQuestion.setOnClickListener(new View.OnClickListener() {
+        cardStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AskPageActivity.this, StudentLoginActivity.class);

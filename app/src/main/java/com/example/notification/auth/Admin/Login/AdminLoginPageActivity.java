@@ -1,5 +1,4 @@
 package com.example.notification.auth.Admin.Login;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,10 +11,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.notification.Dashboard.AdminDashboard.AdminDashboardActivity;
 import com.example.notification.R;
 import com.example.notification.auth.Admin.Register.AdminRegisterPageActivity;
+import com.example.notification.models.AdminLoginRequest;
+import com.example.notification.network.AdminLoginResponse;
+import com.example.notification.network.RetrofitClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AdminLoginPageActivity extends AppCompatActivity {
 
-    private EditText etUsername, etPassword;
+    private EditText etSchoolName, etPassword;
     private Button btnLogin;
     private TextView tvRegisterLink;
 
@@ -24,46 +29,66 @@ public class AdminLoginPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_login);
 
-        // Check if already logged in
         SharedPreferences prefs = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
         boolean isLoggedIn = prefs.getBoolean("isLoggedIn", false);
 
         if (isLoggedIn) {
-            // Redirect to Dashboard automatically
             startActivity(new Intent(AdminLoginPageActivity.this, AdminDashboardActivity.class));
             finish();
         }
 
-        // Initialize UI elements
-        etUsername = findViewById(R.id.et_username);
+        etSchoolName = findViewById(R.id.et_school_name);
         etPassword = findViewById(R.id.et_password);
         btnLogin = findViewById(R.id.btn_login);
         tvRegisterLink = findViewById(R.id.tv_register_link);
 
-        // Set login button click action
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = etUsername.getText().toString().trim();
-                String password = etPassword.getText().toString().trim();
+        btnLogin.setOnClickListener(v -> {
+            String schoolName = etSchoolName.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
 
-                if (!username.isEmpty() && !password.isEmpty()) {
-                    // ✅ Save login status
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putBoolean("isLoggedIn", true);
-                    editor.apply();
+            if (!schoolName.isEmpty() && !password.isEmpty()) {
+                // Prepare login request object
+                AdminLoginRequest request = new AdminLoginRequest(schoolName, password);
 
-                    // Redirect to Dashboard
-                    Intent intent = new Intent(AdminLoginPageActivity.this, AdminDashboardActivity.class);
-                    startActivity(intent);
-                    finish();  // Prevent going back to login screen
-                } else {
-                    Toast.makeText(AdminLoginPageActivity.this, "Enter username & password!", Toast.LENGTH_SHORT).show();
-                }
+                // Call the API to login using RetrofitClient's singleton instance
+                Call<AdminLoginResponse> call = RetrofitClient.getInstance().getApiService().loginAdmin(request);
+
+                call.enqueue(new Callback<AdminLoginResponse>() {
+                    @Override
+                    public void onResponse(Call<AdminLoginResponse> call, Response<AdminLoginResponse> response) {
+                        if (response.isSuccessful()) {
+                            AdminLoginResponse loginResponse = response.body();
+
+                            if (loginResponse != null && loginResponse.isSuccess()) {
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.putBoolean("isLoggedIn", true);
+                                editor.putString("schoolUniqueId", loginResponse.getSchoolUniqueId());
+                                editor.putString("schoolName", loginResponse.getSchoolName());
+                                editor.putString("email", loginResponse.getEmail());
+                                editor.apply();
+
+                                Intent intent = new Intent(AdminLoginPageActivity.this, AdminDashboardActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(AdminLoginPageActivity.this, "Login failed: " + loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(AdminLoginPageActivity.this, "Server error. Please try again later.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<AdminLoginResponse> call, Throwable t) {
+                        Toast.makeText(AdminLoginPageActivity.this, "Network error. Please try again later.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } else {
+                Toast.makeText(AdminLoginPageActivity.this, "Enter school name & password!", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Set Register link click action
         tvRegisterLink.setOnClickListener(v -> {
             Intent intent = new Intent(AdminLoginPageActivity.this, AdminRegisterPageActivity.class);
             startActivity(intent);
