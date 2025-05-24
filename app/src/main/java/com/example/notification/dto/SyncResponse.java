@@ -1,4 +1,4 @@
-package com.example.notification.models;
+package com.example.notification.dto;
 
 public class SyncResponse {
     private String status;

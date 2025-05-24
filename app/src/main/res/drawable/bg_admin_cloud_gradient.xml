@@ -1,0 +1,11 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#DDEEFF"
+                android:endColor="#FFFFFF"
+                android:angle="270"/>
+        </shape>
+    </item>
+    <item android:drawable="@drawable/cloud_overlay" />
+</layer-list>

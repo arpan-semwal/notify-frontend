@@ -1,4 +1,4 @@
-package com.example.notification.models;
+package com.example.notification.dto.AdminLogin;
 
 public class AdminLoginRequest {
     private String schoolName;

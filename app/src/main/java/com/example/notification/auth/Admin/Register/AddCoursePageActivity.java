@@ -12,19 +12,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.notification.Dashboard.AdminDashboard.AdminDashboardActivity;
+import com.example.notification.Dashboard.AdminDashboard.AdminDashboardHome;
 import com.example.notification.R;
 import com.example.notification.models.AdminCourse;
 import com.example.notification.models.AdminRegister;
 import com.example.notification.network.ApiService;
-import com.example.notification.network.RegisterResponse;
+import com.example.notification.dto.RegisterResponse;
 import com.example.notification.network.RetrofitClient;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import org.apache.commons.lang3.RandomStringUtils; // ✅ Import this for random string
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,7 +130,7 @@ public class AddCoursePageActivity extends AppCompatActivity {
                     editor.apply();
 
                     // Navigate to the dashboard
-                    Intent dashboardIntent = new Intent(AddCoursePageActivity.this, AdminDashboardActivity.class);
+                    Intent dashboardIntent = new Intent(AddCoursePageActivity.this, AdminDashboardHome.class);
                     dashboardIntent.putExtra("schoolName", schoolName);
                     startActivity(dashboardIntent);
                     finish();

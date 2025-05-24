@@ -6,7 +6,6 @@ import android.content.Intent;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +13,7 @@ import com.example.notification.Dashboard.StudentDashboard.StudentDashboardActiv
 import com.example.notification.R;
 import com.example.notification.models.AdminCourse;
 import com.example.notification.models.StudentRegister;
-import com.example.notification.models.SchoolResponse;
+import com.example.notification.dto.SchoolResponse;
 import com.example.notification.network.ApiService;
 import com.example.notification.network.RetrofitClient;
 

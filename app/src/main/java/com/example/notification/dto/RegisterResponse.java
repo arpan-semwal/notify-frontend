@@ -1,4 +1,4 @@
-package com.example.notification.network;
+package com.example.notification.dto;
 
 import com.example.notification.models.AdminCourse;
 import java.util.List;

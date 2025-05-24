@@ -1,4 +1,4 @@
-package com.example.notification.models;
+package com.example.notification.dto.Message;
 
 public class MessageRequest {
     private String schoolUniqueId;

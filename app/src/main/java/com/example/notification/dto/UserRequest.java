@@ -1,4 +1,4 @@
-package com.example.notification.network;
+package com.example.notification.dto;
 
 public class UserRequest {
     private final String schoolName;

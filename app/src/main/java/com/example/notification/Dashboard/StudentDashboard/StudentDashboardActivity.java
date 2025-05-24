@@ -3,18 +3,23 @@ package com.example.notification.Dashboard.StudentDashboard;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.notification.Adapter.MessageAdapter;
 import com.example.notification.R;
-import com.example.notification.models.MessageResponse;
-import com.example.notification.models.SyncResponse;
+import com.example.notification.dto.Message.MessageResponse;
+import com.example.notification.dto.SyncResponse;
 import com.example.notification.network.ApiService;
 import com.example.notification.network.RetrofitClient;
 import com.example.notification.utils.NetworkUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,7 +28,8 @@ import retrofit2.Response;
 
 public class StudentDashboardActivity extends AppCompatActivity {
 
-    private TextView tvMessages;
+    private RecyclerView rvMessages;
+    private TextView tvNoMessages;
     private ApiService apiService;
     private String schoolUniqueId, courseUniqueId;
 
@@ -34,18 +40,23 @@ public class StudentDashboardActivity extends AppCompatActivity {
         @Override
         public void run() {
             if (NetworkUtil.isInternetAvailable(StudentDashboardActivity.this)) {
-                fetchMessagesFromServer(); // includes syncing and displaying
+                fetchMessagesFromServer();
             }
             handler.postDelayed(this, SYNC_INTERVAL);
         }
     };
+
+    private final List<MessageResponse> messageList = new ArrayList<>();
+    private MessageAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_dashboard);
 
-        tvMessages = findViewById(R.id.tv_messages);
+        rvMessages = findViewById(R.id.rv_messages);
+        tvNoMessages = findViewById(R.id.tv_no_messages);
+
         apiService = RetrofitClient.getInstance().getApiService();
 
         schoolUniqueId = getIntent().getStringExtra("schoolUniqueId");
@@ -57,7 +68,11 @@ public class StudentDashboardActivity extends AppCompatActivity {
             return;
         }
 
-        handler.post(syncRunnable); // start syncing loop
+        adapter = new MessageAdapter(messageList);
+        rvMessages.setLayoutManager(new LinearLayoutManager(this));
+        rvMessages.setAdapter(adapter);
+
+        handler.post(syncRunnable); // start periodic sync
     }
 
     private void fetchMessagesFromServer() {
@@ -66,8 +81,6 @@ public class StudentDashboardActivity extends AppCompatActivity {
             public void onResponse(Call<SyncResponse> call, Response<SyncResponse> response) {
                 if (response.isSuccessful()) {
                     Log.d("StudentDashboard", "[SYNC SUCCESS] " + response.body().getMessage());
-
-                    // Now fetch synced local messages
                     fetchLocalMessages();
                 } else {
                     Log.e("StudentDashboard", "Sync failed with status code: " + response.code());
@@ -86,16 +99,18 @@ public class StudentDashboardActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<MessageResponse>> call, Response<List<MessageResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    StringBuilder messageContent = new StringBuilder();
-                    for (MessageResponse message : response.body()) {
-                        messageContent.append("• ").append(message.getContent()).append("\n\n");
-                    }
+                    messageList.clear();
+                    messageList.addAll(response.body());
 
                     runOnUiThread(() -> {
-                        if (response.body().isEmpty()) {
-                            tvMessages.setText("No messages found.");
+                        if (messageList.isEmpty()) {
+                            tvNoMessages.setVisibility(View.VISIBLE);
+                            rvMessages.setVisibility(View.GONE);
                         } else {
-                            tvMessages.setText(messageContent.toString());
+                            tvNoMessages.setVisibility(View.GONE);
+                            rvMessages.setVisibility(View.VISIBLE);
+                            adapter.notifyDataSetChanged();
+                            rvMessages.scrollToPosition(messageList.size() - 1);
                         }
                     });
                 }
@@ -111,6 +126,6 @@ public class StudentDashboardActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(syncRunnable); // stop loop
+        handler.removeCallbacks(syncRunnable);
     }
 }

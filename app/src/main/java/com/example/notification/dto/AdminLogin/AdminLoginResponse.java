@@ -1,4 +1,4 @@
-package com.example.notification.network;
+package com.example.notification.dto.AdminLogin;
 
 public class AdminLoginResponse {
     private boolean success;

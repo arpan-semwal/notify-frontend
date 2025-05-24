@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Background: Top Blue, Bottom White -->
+    <!-- Background split: Top Blue / Bottom White -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,83 +22,86 @@
             android:background="@android:color/white" />
     </LinearLayout>
 
-    <!-- Scrollable Form that overlaps the top -->
+    <!-- Scrollable form card -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="200dp"
-        android:clipToPadding="false"
         android:fillViewport="true"
         android:paddingHorizontal="24dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:background="@drawable/form_card_bg"
-            android:clipToPadding="false"
-            android:elevation="12dp"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="24dp"
+            android:background="@drawable/form_card_bg"
+            android:elevation="12dp"
+            android:layout_marginBottom="32dp">
 
             <!-- Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="24dp"
                 android:text="@string/admin_login"
-                android:textColor="@android:color/black"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_gravity="center"
+                android:layout_marginBottom="24dp" />
 
-            <!-- School Name EditText -->
-            <EditText
+            <!-- ✅ Important: Use dropdownStyle -->
+            <AutoCompleteTextView
                 android:id="@+id/et_school_name"
-                style="@style/FormEditText"
-                android:autofillHints=""
-                android:hint="@string/School_name"
-                android:inputType="text" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="School Name"
+                android:inputType="text"
+                android:textColor="#000000"
+            android:dropDownHeight="wrap_content"
+            />
 
-            <!-- Password EditText -->
+
+            <!-- Password -->
             <EditText
                 android:id="@+id/et_password"
-                style="@style/FormEditText"
-                android:autofillHints=""
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/hint_password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:layout_marginTop="12dp" />
 
-            <!-- Login Button -->
+            <!-- Login -->
             <Button
                 android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="#2196F3"
-                android:padding="14dp"
                 android:text="@string/login_heading"
                 android:textColor="@android:color/white"
+                android:padding="14dp"
                 android:textSize="16sp" />
 
             <!-- Line -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#D3D3D3"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:background="#D3D3D3" />
 
-            <!-- Register Link TextView -->
+            <!-- Register -->
             <TextView
                 android:id="@+id/tv_register_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/register_not_register_text"
-                android:textSize="16sp"
                 android:textColor="@android:color/holo_blue_dark"
-                android:clickable="true"
-                android:focusable="true"
+                android:textSize="16sp"
                 android:layout_marginTop="10dp"
-                android:gravity="center" />
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

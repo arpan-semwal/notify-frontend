@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.notification.Dashboard.AdminDashboard.AdminDashboardActivity;
+import com.example.notification.Dashboard.AdminDashboard.AdminMessageActivity;
 import com.example.notification.auth.Admin.Login.AdminLoginPageActivity;
 import com.example.notification.auth.Student.Login.StudentLoginActivity;
 
@@ -23,7 +23,7 @@ public class AskPageActivity extends AppCompatActivity {
         boolean isLoggedIn = prefs.getBoolean("isLoggedIn", false);
 
         if (isLoggedIn) {
-            startActivity(new Intent(AskPageActivity.this, AdminDashboardActivity.class));
+            startActivity(new Intent(AskPageActivity.this, AdminMessageActivity.class));
             finish();
             return;
         }

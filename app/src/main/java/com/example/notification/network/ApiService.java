@@ -2,26 +2,31 @@ package com.example.notification.network;
 
 import java.util.List;
 
-import okhttp3.ResponseBody;
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-
+import com.example.notification.dto.AdminLogin.AdminLoginResponse;
+import com.example.notification.dto.LoginResponse;
+import com.example.notification.dto.RegisterResponse;
+import com.example.notification.dto.UserRequest;
 import com.example.notification.models.AdminCourse;
-import com.example.notification.models.AdminLoginRequest;
+import com.example.notification.dto.AdminLogin.AdminLoginRequest;
 import com.example.notification.models.AdminRegister;
-import com.example.notification.models.MessageRequest;
-import com.example.notification.models.MessageResponse;
+import com.example.notification.dto.Message.MessageRequest;
+import com.example.notification.dto.Message.MessageResponse;
+import com.example.notification.models.GlobalMessage;
 import com.example.notification.models.StudentRegister;
-import com.example.notification.models.SchoolResponse;
-import com.example.notification.models.SyncResponse;
-
+import com.example.notification.dto.SchoolResponse;
+import com.example.notification.dto.SyncResponse;
 public interface ApiService {
 
-    // Use  // Admin login (ADDED)
+    // Admin login (ADDED)
     @POST("api/admin/login")
     Call<AdminLoginResponse> loginAdmin(@Body AdminLoginRequest request);
     @POST("api/users/login")
@@ -54,13 +59,14 @@ public interface ApiService {
     @GET("api/messages/sync")
     Call<SyncResponse> syncMessages(@Query("schoolUniqueId") String schoolUniqueId,
                                     @Query("courseUniqueId") String courseUniqueId);
+    @GET("/api/schools/search")
+    Call<List<SchoolResponse>> searchSchools(@Query("query") String query);
 
 
-
-
-
-
-
-
+    @GET("/api/messages/fetch-global")
+    Call<List<GlobalMessage>> fetchGlobalMessages(
+            @Query("schoolUniqueId") String schoolUniqueId,
+            @Query("courseUniqueId") String courseUniqueId
+    );
 
 }
